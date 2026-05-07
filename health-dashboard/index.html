@@ -21,8 +21,9 @@
       --low-bg: #121a2e; --low-text: #93c5fd; --low-border: #1d3d7a;
       --high-bg: #2a1508; --high-text: #fb923c; --high-border: #7a3010;
 
-      --zach-color:  #60a5fa;
-      --chase-color: #e879f9;
+      --zach-color:   #60a5fa;
+      --chase-color:  #e879f9;
+      --thomas-color: #2dd4bf;
     }
 
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
@@ -41,8 +42,9 @@
     .legend { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
     .dot-legend { width: 12px; height: 12px; border-radius: 50%; }
-    .dot-legend.zach  { background: var(--zach-color); }
-    .dot-legend.chase { background: var(--chase-color); }
+    .dot-legend.zach   { background: var(--zach-color); }
+    .dot-legend.chase  { background: var(--chase-color); }
+    .dot-legend.thomas { background: var(--thomas-color); }
 
     /* ── Summary cards ── */
     .summary-row { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
@@ -222,6 +224,7 @@
   <div class="legend">
     <div class="legend-item"><div class="dot-legend zach"></div> Zach (Apr 13, 2026)</div>
     <div class="legend-item"><div class="dot-legend chase"></div> Chase (May 1, 2026)</div>
+    <div class="legend-item"><div class="dot-legend thomas"></div> Thomas (pending)</div>
     <div class="legend-item" style="margin-left:8px">
       <span style="display:inline-block;width:32px;height:10px;background:rgba(93,219,138,0.15);border:1px solid rgba(93,219,138,0.3);border-radius:2px"></span>
       &nbsp;Functional optimal zone
