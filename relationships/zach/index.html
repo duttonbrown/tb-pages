@@ -9,1267 +9,286 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #140e09;
-      --surface: #1f1510;
-      --surface2: #2a1c12;
-      --border: #6b4a30;
-      --text: #f2e4d0;
-      --muted: #a08060;
-      --accent: #c8851a;
-
-      --opt-bg: #0d2010; --opt-text: #5ddb8a; --opt-border: #235e30;
-      --low-bg: #121a2e; --low-text: #93c5fd; --low-border: #1d3d7a;
-      --high-bg: #2a1508; --high-text: #fb923c; --high-border: #7a3010;
-      --oor-row: rgba(200,50,20,0.09);
-      --opt-row: rgba(60,180,100,0.06);
+      --bg: #111216; --surface: #18191f; --surface2: #1e2028;
+      --border: #2d3040; --text: #e4e6f0; --muted: #7e8599; --accent: #a0aaff;
+      --opt-bg: #0d1f14; --opt-text: #4ade80; --opt-border: #1a4d2a;
+      --low-bg: #0e1726; --low-text: #93c5fd; --low-border: #1e3d6e;
+      --high-bg: #1f1209; --high-text: #fb923c; --high-border: #6b3010;
+      --oor-row: rgba(239,68,68,0.07); --opt-row: rgba(74,222,128,0.05);
     }
-
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
-
-    header {
-      background: linear-gradient(135deg, #251a10 0%, #1a1008 100%);
-      border-bottom: 2px solid var(--border);
-      padding: 40px 40px 32px;
-    }
-    .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .header-title h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-    .header-title .subtitle { color: var(--muted); font-size: 14px; margin-top: 6px; }
-    .header-meta { text-align: right; font-size: 13px; color: var(--muted); }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 32px 40px 28px; }
+    .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .header-title h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+    .header-title .subtitle { color: var(--muted); font-size: 13px; margin-top: 5px; }
+    .header-meta { text-align: right; font-size: 12px; color: var(--muted); line-height: 1.8; }
     .header-meta strong { color: var(--text); }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin-top: 28px;
-      max-width: 700px;
-    }
-    .stat-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 18px;
-    }
-    .stat-card .num { font-size: 32px; font-weight: 600; line-height: 1; }
-    .stat-card .label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-opt .num { color: var(--opt-text); }
-    .stat-low .num { color: var(--low-text); }
-    .stat-high .num { color: var(--high-text); }
-    .stat-oor .num { color: #f87171; }
-    .stat-total .num { color: var(--accent); }
-
-    main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
-
-    .cat-section { margin-bottom: 48px; }
-    .cat-title {
-      font-size: 16px; font-weight: 600; letter-spacing: 0.3px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 16px;
-      color: var(--accent);
-    }
-    .cat-flag { color: #f87171; font-size: 14px; }
-
-    .table-wrap { overflow-x: auto; }
-
-    .bm-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .bm-table thead th {
-      text-align: left;
-      font-weight: 500;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--muted);
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    .bm-row { border-bottom: 1px solid var(--border); }
+    .summary-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; min-width: 90px; }
+    .stat-card .num { font-size: 26px; font-weight: 600; line-height: 1; }
+    .stat-card .lbl { font-size: 10px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .s-opt .num { color: var(--opt-text); } .s-low .num { color: var(--low-text); }
+    .s-high .num { color: var(--high-text); } .s-oor .num { color: #f87171; }
+    .s-tot .num { color: var(--accent); }
+    .controls { padding: 14px 40px; border-bottom: 1px solid var(--border); background: var(--surface);
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 340px; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    #search { width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px 8px 32px; color: var(--text); font-size: 13px; outline: none; }
+    #search:focus { border-color: var(--accent); } #search::placeholder { color: var(--muted); }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 5px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+    .pill:hover { color: var(--text); border-color: var(--accent); }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: #0d0f18; }
+    #result-count { font-size: 12px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+    main { padding: 28px 40px; max-width: 1200px; }
+    .cat-section { margin-bottom: 40px; }
+    .cat-title { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+    .cat-flag { color: #f87171; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .bm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .bm-table thead th { text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--muted); padding: 7px 12px; border-bottom: 1px solid var(--border);
+      white-space: nowrap; background: var(--surface); }
+    .bm-row { border-bottom: 1px solid rgba(45,48,64,0.5); }
     .bm-row:last-child { border-bottom: none; }
-    .bm-row td { padding: 10px 12px; vertical-align: top; }
+    .bm-row td { padding: 9px 12px; vertical-align: top; }
     .bm-row:hover { background: rgba(255,255,255,0.02); }
-
-    .bm-row.status-oor { background: var(--oor-row); }
-    .bm-row.status-optimal { background: var(--opt-row); }
-
-    .bm-name { font-weight: 500; white-space: nowrap; min-width: 180px; }
+    .bm-row.oor { background: var(--oor-row); }
+    .bm-row.opt-row { background: var(--opt-row); }
+    .bm-name { font-weight: 500; min-width: 160px; }
     .bm-val { font-weight: 600; white-space: nowrap; }
-    .bm-range, .bm-frange { color: var(--muted); white-space: nowrap; font-size: 12px; }
-    .bm-detail { max-width: 380px; }
+    .bm-range { color: var(--muted); white-space: nowrap; font-size: 12px; }
+    .bm-detail { max-width: 340px; }
     .bm-note { color: var(--muted); font-size: 12px; }
-    .bm-source { color: #7a5a38; font-size: 11px; margin-top: 3px; }
-
-    .level-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .level-optimal { background: var(--opt-bg); color: var(--opt-text); border: 1px solid var(--opt-border); }
-    .level-low { background: var(--low-bg); color: var(--low-text); border: 1px solid var(--low-border); }
-    .level-high { background: var(--high-bg); color: var(--high-text); border: 1px solid var(--high-border); }
-
-    footer {
-      text-align: center;
-      padding: 32px;
-      color: var(--muted);
-      font-size: 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 600px) {
-      header, main { padding-left: 20px; padding-right: 20px; }
+    .bm-src { color: #4a5270; font-size: 11px; margin-top: 2px; }
+    .level-badge { display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap; }
+    .badge-opt { background: var(--opt-bg); color: var(--opt-text); border: 1px solid var(--opt-border); }
+    .badge-low { background: var(--low-bg); color: var(--low-text); border: 1px solid var(--low-border); }
+    .badge-high { background: var(--high-bg); color: var(--high-text); border: 1px solid var(--high-border); }
+    .action-details { margin-top: 7px; }
+    .action-summary { cursor: pointer; font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--accent); list-style: none; display: inline-flex;
+      align-items: center; gap: 5px; user-select: none; }
+    .action-summary::before { content: "▶"; font-size: 8px; transition: transform 0.15s; }
+    .action-details[open] .action-summary::before { transform: rotate(90deg); }
+    .action-list { margin-top: 7px; padding-left: 16px; font-size: 12px; color: var(--muted); line-height: 1.75; }
+    .action-list li { margin-bottom: 3px; }
+    .bm-row.hidden { display: none; }
+    .cat-section.all-hidden { display: none; }
+    footer { text-align: center; padding: 24px 40px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); }
+    footer a { color: var(--muted); text-decoration: none; } footer a:hover { color: var(--text); }
+    @media (max-width: 680px) {
+      header, .controls, main, footer { padding-left: 16px; padding-right: 16px; }
       .header-meta { text-align: left; }
+      .bm-table thead { display: none; }
+      .bm-row { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+      .bm-row.oor { border-color: var(--high-border); }
+      .bm-row td { display: block; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+      .bm-row td:last-child { border-bottom: none; }
+      .bm-row td::before { content: attr(data-label); display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 2px; }
+      .stat-card { min-width: 80px; padding: 10px 12px; }
+      .stat-card .num { font-size: 20px; }
     }
-  </style>
+</style>
 </head>
 <body>
-
 <header>
   <div class="header-top">
     <div class="header-title">
       <h1>Zach Dutton — Function Health Biomarker Report</h1>
-      <div class="subtitle">Quest Diagnostics · Collection: April 13, 2026 · Reported: April 19, 2026</div>
+      <div class="subtitle">Quest Diagnostics &nbsp;·&nbsp; Collection Apr 13, 2026 &nbsp;·&nbsp; Reported Apr 18, 2026</div>
     </div>
     <div class="header-meta">
-      <div><strong>DOB</strong> 10/21/1982 &nbsp;·&nbsp; <strong>Male, Age 43</strong></div>
-      <div style="margin-top:4px"><strong>Functional ranges</strong> sourced from Function Health,<br>Peter Attia MD, AHA/ACC, and Functional Medicine literature.</div>
+      <strong>DOB</strong> 06/08/1989 &nbsp;·&nbsp; <strong>Male, Age 36</strong><br>
+      Functional ranges: Function Health, Peter Attia MD, AHA/ACC
     </div>
   </div>
-
   <div class="summary-grid">
-    <div class="stat-card stat-total">
-      <div class="num">99</div>
-      <div class="label">Total Biomarkers</div>
-    </div>
-    <div class="stat-card stat-opt">
-      <div class="num">63</div>
-      <div class="label">Functionally Optimal</div>
-    </div>
-    <div class="stat-card stat-low">
-      <div class="num">15</div>
-      <div class="label">Functionally Low</div>
-    </div>
-    <div class="stat-card stat-high">
-      <div class="num">21</div>
-      <div class="label">Functionally High</div>
-    </div>
-    <div class="stat-card stat-oor">
-      <div class="num">18</div>
-      <div class="label">Out of Lab Range</div>
-    </div>
+    <div class="stat-card s-tot"><div class="num">99</div><div class="lbl">Total</div></div>
+    <div class="stat-card s-opt"><div class="num">65</div><div class="lbl">Optimal</div></div>
+    <div class="stat-card s-low"><div class="num">16</div><div class="lbl">Low</div></div>
+    <div class="stat-card s-high"><div class="num">18</div><div class="lbl">High</div></div>
+    <div class="stat-card s-oor"><div class="num">18</div><div class="lbl">Out of Lab Range</div></div>
   </div>
 </header>
 
-<main>
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search biomarkers, notes, actions…" autocomplete="off">
+  </div>
+  <div class="pills">
+    <button class="pill active" data-filter="all">All (99)</button>
+    <button class="pill" data-filter="optimal">Optimal (65)</button>
+    <button class="pill" data-filter="low">Low (16)</button>
+    <button class="pill" data-filter="high">High (18)</button>
+    <button class="pill" data-filter="out-of-range">Out of Range (18)</button>
+  </div>
+  <span id="result-count"></span>
+</div>
 
-  <section class="cat-section">
-    <h2 class="cat-title">Iron Panel <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Iron, Total</td>
-      <td class="bm-val">134 mcg/dL</td>
-      <td class="bm-range">50 – 180</td>
-      <td class="bm-frange">70 – 160</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Life Extension / Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Iron Binding Capacity</td>
-      <td class="bm-val">407 mcg/dL</td>
-      <td class="bm-range">250 – 425</td>
-      <td class="bm-frange">250 – 370</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">TIBC. Calculated.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Iron % Saturation</td>
-      <td class="bm-val">33 %</td>
-      <td class="bm-range">20 – 48</td>
-      <td class="bm-frange">20 – 40</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Calculated.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Ferritin</td>
-      <td class="bm-val">32 ng/mL</td>
-      <td class="bm-range">38 – 380</td>
-      <td class="bm-frange">50 – 200</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged L — below low normal (38). Low ferritin may indicate iron deficiency or depletion.</div><div class="bm-source">Source: Function Health / Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Lipid Panel <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Cholesterol, Total</td>
-      <td class="bm-val">239 mg/dL</td>
-      <td class="bm-range">≤ 200</td>
-      <td class="bm-frange">≤ 200</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. Desirable <200 mg/dL.</div><div class="bm-source">Source: AHA/ACC Guidelines</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">HDL Cholesterol</td>
-      <td class="bm-val">63 mg/dL</td>
-      <td class="bm-range">≥ 40</td>
-      <td class="bm-frange">≥ 50</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reference >=40. Higher is cardioprotective.</div><div class="bm-source">Source: AHA/ACC / Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Triglycerides</td>
-      <td class="bm-val">187 mg/dL</td>
-      <td class="bm-range">≤ 150</td>
-      <td class="bm-frange">≤ 100</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. Reference <150 mg/dL.</div><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL-Cholesterol</td>
-      <td class="bm-val">144 mg/dL</td>
-      <td class="bm-range">≤ 100</td>
-      <td class="bm-frange">≤ 100</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. Martin-Hopkins calculation. Ref <100; <70 for CHD/high-risk patients.</div><div class="bm-source">Source: AHA/ACC Guidelines</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Chol/HDLC Ratio</td>
-      <td class="bm-val">3.8 ratio</td>
-      <td class="bm-range">≤ 5.0</td>
-      <td class="bm-frange">≤ 4.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Calculated. Reference <5.0.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Non-HDL Cholesterol</td>
-      <td class="bm-val">176 mg/dL</td>
-      <td class="bm-range">≤ 130</td>
-      <td class="bm-frange">≤ 130</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. Calculated. Reference <130 mg/dL.</div><div class="bm-source">Source: AHA/ACC Guidelines</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Lipoprotein (a)</td>
-      <td class="bm-val">26 nmol/L</td>
-      <td class="bm-range">≤ 75</td>
-      <td class="bm-frange">≤ 75</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Optimal <75, Moderate 75-125, High >125.</div><div class="bm-source">Source: JACC 2017 / Quest Diagnostics</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Lipoprotein Fractionation <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL Particle Number</td>
-      <td class="bm-val">2253 nmol/L</td>
-      <td class="bm-range">≤ 1138</td>
-      <td class="bm-frange">≤ 1000</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. HIGH cardiovascular risk (>1409). Optimal <1138, Moderate 1138-1409, High >1409.</div><div class="bm-source">Source: Peter Attia MD / Cardiometabolic Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL Small</td>
-      <td class="bm-val">524 nmol/L</td>
-      <td class="bm-range">≤ 142</td>
-      <td class="bm-frange">≤ 200</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. HIGH risk (>219). Small dense LDL most atherogenic.</div><div class="bm-source">Source: Functional Medicine / Cleveland HeartLab</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL Medium</td>
-      <td class="bm-val">379 nmol/L</td>
-      <td class="bm-range">≤ 215</td>
-      <td class="bm-frange">≤ 215</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. HIGH risk (>301).</div><div class="bm-source">Source: Quest Diagnostics Cardio IQ</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">HDL Large</td>
-      <td class="bm-val">6047 nmol/L</td>
-      <td class="bm-range">≥ 6729</td>
-      <td class="bm-frange">≥ 6729</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged L. Moderate risk. Optimal >6729. Large HDL most cardioprotective.</div><div class="bm-source">Source: Quest Diagnostics Cardio IQ</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL Pattern</td>
-      <td class="bm-val">—</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Pattern B (HIGH risk). Optimal = Pattern A. Predominance of small dense LDL.</div><div class="bm-source">Source: Quest Diagnostics Cardio IQ</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LDL Peak Size</td>
-      <td class="bm-val">209.7 Angstrom</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">≥ 222.9</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged L. HIGH risk (<217.4). Optimal >222.9, Moderate 222.9-217.4.</div><div class="bm-source">Source: Quest Diagnostics Cardio IQ / Musunuru ATVB 2009</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Cardiovascular <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Homocysteine</td>
-      <td class="bm-val">4.6 umol/L</td>
-      <td class="bm-range">≤ 13.5</td>
-      <td class="bm-frange">≤ 8.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reference <=13.5. Excellent level.</div><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Apolipoprotein B</td>
-      <td class="bm-val">123 mg/dL</td>
-      <td class="bm-range">≤ 90</td>
-      <td class="bm-frange">≤ 80</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. Optimal <90, Moderate 90-129, High >=130. At 123 = Moderate risk.</div><div class="bm-source">Source: AACE/ACE / ACC/AHA Guidelines</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Metabolic <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Uric Acid</td>
-      <td class="bm-val">4.8 mg/dL</td>
-      <td class="bm-range">4.0 – 8.0</td>
-      <td class="bm-frange">3.5 – 5.5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Therapeutic target for gout: <6.0 mg/dL.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Glucose</td>
-      <td class="bm-val">88 mg/dL</td>
-      <td class="bm-range">65 – 99</td>
-      <td class="bm-frange">72 – 90</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Fasting reference interval.</div><div class="bm-source">Source: Functional Medicine / Longevity Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Sodium</td>
-      <td class="bm-val">138 mmol/L</td>
-      <td class="bm-range">135 – 146</td>
-      <td class="bm-frange">136 – 144</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Potassium</td>
-      <td class="bm-val">4.2 mmol/L</td>
-      <td class="bm-range">3.5 – 5.3</td>
-      <td class="bm-frange">3.9 – 4.8</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Chloride</td>
-      <td class="bm-val">97 mmol/L</td>
-      <td class="bm-range">98 – 110</td>
-      <td class="bm-frange">100 – 108</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged L — 1 point below low normal (98). Minimal clinical significance.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Carbon Dioxide</td>
-      <td class="bm-val">29 mmol/L</td>
-      <td class="bm-range">20 – 32</td>
-      <td class="bm-frange">25 – 30</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Bicarbonate. Reflects acid-base balance.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Calcium</td>
-      <td class="bm-val">9.9 mg/dL</td>
-      <td class="bm-range">8.6 – 10.3</td>
-      <td class="bm-frange">9.2 – 10.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Insulin</td>
-      <td class="bm-val">3.8 uIU/mL</td>
-      <td class="bm-range">≤ 18.4</td>
-      <td class="bm-frange">3 – 8</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Optimal <=18.4. Low fasting insulin = excellent insulin sensitivity.</div><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Hemoglobin A1c</td>
-      <td class="bm-val">5.1 %</td>
-      <td class="bm-range">≤ 5.7</td>
-      <td class="bm-frange">4.6 – 5.4</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Optimal <5.7%. Absent diabetes.</div><div class="bm-source">Source: Functional Medicine / Longevity Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Liver</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">GGT</td>
-      <td class="bm-val">18 U/L</td>
-      <td class="bm-range">3 – 95</td>
-      <td class="bm-frange">≤ 25</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Gamma-glutamyl transferase.</div><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Protein, Total</td>
-      <td class="bm-val">7.6 g/dL</td>
-      <td class="bm-range">6.1 – 8.1</td>
-      <td class="bm-frange">6.9 – 7.9</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Albumin</td>
-      <td class="bm-val">4.9 g/dL</td>
-      <td class="bm-range">3.6 – 5.1</td>
-      <td class="bm-frange">4.3 – 5.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Globulin</td>
-      <td class="bm-val">2.7 g/dL</td>
-      <td class="bm-range">1.9 – 3.7</td>
-      <td class="bm-frange">2.2 – 3.2</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Calculated.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Albumin/Globulin Ratio</td>
-      <td class="bm-val">1.8 ratio</td>
-      <td class="bm-range">1.0 – 2.5</td>
-      <td class="bm-frange">1.3 – 2.2</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Calculated.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Bilirubin, Total</td>
-      <td class="bm-val">0.6 mg/dL</td>
-      <td class="bm-range">0.2 – 1.2</td>
-      <td class="bm-frange">0.3 – 1.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Alkaline Phosphatase</td>
-      <td class="bm-val">124 U/L</td>
-      <td class="bm-range">36 – 130</td>
-      <td class="bm-frange">40 – 100</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Near upper limit.</div><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">AST</td>
-      <td class="bm-val">23 U/L</td>
-      <td class="bm-range">10 – 40</td>
-      <td class="bm-frange">10 – 25</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">ALT</td>
-      <td class="bm-val">23 U/L</td>
-      <td class="bm-range">9 – 46</td>
-      <td class="bm-frange">10 – 25</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine / Peter Attia MD</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Amylase</td>
-      <td class="bm-val">64 U/L</td>
-      <td class="bm-range">21 – 101</td>
-      <td class="bm-frange">30 – 80</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Pancreatic enzyme.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Lipase</td>
-      <td class="bm-val">24 U/L</td>
-      <td class="bm-range">7 – 60</td>
-      <td class="bm-frange">10 – 50</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Pancreatic enzyme.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Kidney</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">BUN (Urea Nitrogen)</td>
-      <td class="bm-val">16 mg/dL</td>
-      <td class="bm-range">7 – 25</td>
-      <td class="bm-frange">10 – 18</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Creatinine</td>
-      <td class="bm-val">1.17 mg/dL</td>
-      <td class="bm-range">0.6 – 1.29</td>
-      <td class="bm-frange">0.7 – 1.1</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">eGFR</td>
-      <td class="bm-val">79 mL/min/1.73m²</td>
-      <td class="bm-range">≥ 60</td>
-      <td class="bm-frange">≥ 90</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Reference >=60. Values 60–89 = mildly reduced.</div><div class="bm-source">Source: Functional Medicine / KDIGO Guidelines</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Albumin, Urine</td>
-      <td class="bm-val">—</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <0.2 mg/dL. No albuminuria detected.</div><div class="bm-source">Source: ADA / Quest Diagnostics</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Thyroid</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Thyroglobulin Antibodies</td>
-      <td class="bm-val">2 IU/mL</td>
-      <td class="bm-range">≤ 2</td>
-      <td class="bm-frange">≤ 2</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <2 (lower limit of quantification).</div><div class="bm-source">Source: Quest Diagnostics / Beckman Coulter</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Thyroid Peroxidase Antibodies</td>
-      <td class="bm-val">1 IU/mL</td>
-      <td class="bm-range">≤ 9</td>
-      <td class="bm-frange">≤ 2</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <1. Reference <9.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">TSH</td>
-      <td class="bm-val">1.73 mIU/L</td>
-      <td class="bm-range">0.4 – 4.5</td>
-      <td class="bm-frange">1.0 – 2.5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine / Thyroid Research</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">T4, Free</td>
-      <td class="bm-val">1.4 ng/dL</td>
-      <td class="bm-range">0.8 – 1.8</td>
-      <td class="bm-frange">1.0 – 1.7</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">T3, Free</td>
-      <td class="bm-val">3.5 pg/mL</td>
-      <td class="bm-range">2.3 – 4.2</td>
-      <td class="bm-frange">3.0 – 4.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Hormones <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Leptin</td>
-      <td class="bm-val">0.3 ng/mL</td>
-      <td class="bm-range">0.3 – 13.4</td>
-      <td class="bm-frange">1.0 – 9.0</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Adult lean males. At lower limit — consistent with very lean body composition.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Cortisol, Total</td>
-      <td class="bm-val">12.8 mcg/dL</td>
-      <td class="bm-range">4.0 – 22.0</td>
-      <td class="bm-frange">10 – 18</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">8am reference: 4.0–22.0 mcg/dL.</div><div class="bm-source">Source: Functional Medicine (8am draw)</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">DHEA Sulfate</td>
-      <td class="bm-val">130 mcg/dL</td>
-      <td class="bm-range">61 – 442</td>
-      <td class="bm-frange">150 – 350</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine / Age-adjusted (men 40s)</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">FSH</td>
-      <td class="bm-val">0.7 mIU/mL</td>
-      <td class="bm-range">1.4 – 12.8</td>
-      <td class="bm-frange">1.4 – 12.8</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <0.7. Flagged L. Likely suppressed by exogenous testosterone therapy — expected in TRT patients.</div><div class="bm-source">Source: Quest Diagnostics / Note: suppressed by TRT</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">LH</td>
-      <td class="bm-val">0.2 mIU/mL</td>
-      <td class="bm-range">1.5 – 9.3</td>
-      <td class="bm-frange">1.5 – 9.3</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <0.2. Flagged L. Likely suppressed by testosterone therapy.</div><div class="bm-source">Source: Quest Diagnostics / Note: suppressed by TRT</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Prolactin</td>
-      <td class="bm-val">4.7 ng/mL</td>
-      <td class="bm-range">2.0 – 18.0</td>
-      <td class="bm-frange">2 – 10</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Estradiol</td>
-      <td class="bm-val">30 pg/mL</td>
-      <td class="bm-range">≤ 39</td>
-      <td class="bm-frange">15 – 35</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <30. Reference <=39.</div><div class="bm-source">Source: Functional Medicine (males)</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">SHBG</td>
-      <td class="bm-val">45 nmol/L</td>
-      <td class="bm-range">10 – 50</td>
-      <td class="bm-frange">20 – 45</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Near upper limit.</div><div class="bm-source">Source: Functional Medicine (males)</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Testosterone, Total</td>
-      <td class="bm-val">815 ng/dL</td>
-      <td class="bm-range">250 – 1100</td>
-      <td class="bm-frange">600 – 900</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Measured by mass spectrometry. Upper-normal range.</div><div class="bm-source">Source: Functional Medicine / Optimal Male Health</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Testosterone, Free</td>
-      <td class="bm-val">134.7 pg/mL</td>
-      <td class="bm-range">35.0 – 155.0</td>
-      <td class="bm-frange">70 – 130</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Measured by equilibrium dialysis.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">CBC <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">WBC</td>
-      <td class="bm-val">5.5 K/uL</td>
-      <td class="bm-range">3.8 – 10.8</td>
-      <td class="bm-frange">4.0 – 7.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">White blood cell count.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">RBC</td>
-      <td class="bm-val">5.61 M/uL</td>
-      <td class="bm-range">4.2 – 5.8</td>
-      <td class="bm-frange">4.5 – 5.5</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Red blood cell count.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Hemoglobin</td>
-      <td class="bm-val">17.4 g/dL</td>
-      <td class="bm-range">13.2 – 17.1</td>
-      <td class="bm-frange">14.0 – 17.0</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. May reflect hemoconcentration or erythrocytosis. Context: testosterone therapy.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Hematocrit</td>
-      <td class="bm-val">50.7 %</td>
-      <td class="bm-range">39.4 – 51.1</td>
-      <td class="bm-frange">40.0 – 50.0</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Near upper limit. Consistent with elevated Hgb.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">MCV</td>
-      <td class="bm-val">90.4 fL</td>
-      <td class="bm-range">81.4 – 101.7</td>
-      <td class="bm-frange">85 – 95</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Mean corpuscular volume.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">MCH</td>
-      <td class="bm-val">31 pg</td>
-      <td class="bm-range">27.0 – 33.0</td>
-      <td class="bm-frange">28 – 32</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Mean corpuscular hemoglobin.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">MCHC</td>
-      <td class="bm-val">34.3 g/dL</td>
-      <td class="bm-range">31.6 – 35.4</td>
-      <td class="bm-frange">32 – 35</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">RDW</td>
-      <td class="bm-val">13.5 %</td>
-      <td class="bm-range">11.0 – 15.0</td>
-      <td class="bm-frange">≤ 13.0</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Red cell distribution width.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Platelet Count</td>
-      <td class="bm-val">235 K/uL</td>
-      <td class="bm-range">140 – 400</td>
-      <td class="bm-frange">150 – 350</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">MPV</td>
-      <td class="bm-val">10.5 fL</td>
-      <td class="bm-range">7.5 – 12.5</td>
-      <td class="bm-frange">8.5 – 11.5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Mean platelet volume.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Absolute Neutrophils</td>
-      <td class="bm-val">3333 cells/uL</td>
-      <td class="bm-range">1500 – 7800</td>
-      <td class="bm-frange">2000 – 6000</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Absolute Lymphocytes</td>
-      <td class="bm-val">1133 cells/uL</td>
-      <td class="bm-range">850 – 3900</td>
-      <td class="bm-frange">1500 – 3500</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Absolute Monocytes</td>
-      <td class="bm-val">402 cells/uL</td>
-      <td class="bm-range">200 – 950</td>
-      <td class="bm-frange">200 – 600</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-oor">
-      <td class="bm-name">Absolute Eosinophils</td>
-      <td class="bm-val">583 cells/uL</td>
-      <td class="bm-range">15 – 500</td>
-      <td class="bm-frange">15 – 250</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged H. May indicate allergic response, parasitic infection, or inflammation.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Absolute Basophils</td>
-      <td class="bm-val">50 cells/uL</td>
-      <td class="bm-range">0 – 200</td>
-      <td class="bm-frange">0 – 100</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Inflammation</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">ANA Screen, IFA</td>
-      <td class="bm-val">—</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">NEGATIVE. No ANA-associated autoimmune disease detected.</div><div class="bm-source">Source: Quest Diagnostics</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Rheumatoid Factor</td>
-      <td class="bm-val">10 IU/mL</td>
-      <td class="bm-range">≤ 14</td>
-      <td class="bm-frange">≤ 10</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <10. Reference <14.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">hs-CRP</td>
-      <td class="bm-val">0.2 mg/L</td>
-      <td class="bm-range">≤ 1.0</td>
-      <td class="bm-frange">≤ 0.5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <0.2. Lower relative cardiovascular risk.</div><div class="bm-source">Source: AHA/CDC / Peter Attia MD</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Omega Fatty Acids <span class="cat-flag">⚑</span></h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-oor">
-      <td class="bm-name">OmegaCheck (EPA+DPA+DHA)</td>
-      <td class="bm-val">5.4 % by wt</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">≥ 5.5</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Flagged L. Borderline — at threshold (>=5.5 required). Moderate cardiac risk.</div><div class="bm-source">Source: Quest OmegaCheck / Albert et al. NEJM 2002</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">EPA</td>
-      <td class="bm-val">0.8 % by wt</td>
-      <td class="bm-range">0.2 – 2.3</td>
-      <td class="bm-frange">0.5 – 2.3</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Eicosapentaenoic acid.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">DPA</td>
-      <td class="bm-val">1.6 % by wt</td>
-      <td class="bm-range">0.8 – 1.8</td>
-      <td class="bm-frange">0.8 – 1.8</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Docosapentaenoic acid.</div><div class="bm-source">Source: Quest Diagnostics Reference</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">DHA</td>
-      <td class="bm-val">3 % by wt</td>
-      <td class="bm-range">1.4 – 5.1</td>
-      <td class="bm-frange">2.0 – 5.1</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Docosahexaenoic acid.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Omega-3 Total</td>
-      <td class="bm-val">5.4 % by wt</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">≥ 5.5</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Total omega-3 fatty acids.</div><div class="bm-source">Source: Quest OmegaCheck</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Omega-6 Total</td>
-      <td class="bm-val">32.6 % by wt</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">20 – 30</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Total omega-6 fatty acids.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Arachidonic Acid</td>
-      <td class="bm-val">8.8 % by wt</td>
-      <td class="bm-range">8.6 – 15.6</td>
-      <td class="bm-frange">8.6 – 12.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Omega-6.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Linoleic Acid</td>
-      <td class="bm-val">18.9 % by wt</td>
-      <td class="bm-range">18.6 – 29.5</td>
-      <td class="bm-frange">20.0 – 28.0</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Omega-6. Near lower limit.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Arachidonic Acid/EPA Ratio</td>
-      <td class="bm-val">10.5 ratio</td>
-      <td class="bm-range">3.7 – 40.7</td>
-      <td class="bm-frange">≤ 20.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Higher ratio may indicate greater inflammatory tendency.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Omega-6/Omega-3 Ratio</td>
-      <td class="bm-val">6 ratio</td>
-      <td class="bm-range">3.7 – 14.4</td>
-      <td class="bm-frange">≤ 6.0</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Vitamins & Minerals</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Magnesium, RBC</td>
-      <td class="bm-val">4.6 mg/dL</td>
-      <td class="bm-range">4.0 – 6.4</td>
-      <td class="bm-frange">5.2 – 6.4</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">RBC (intracellular) magnesium. More sensitive than serum Mg.</div><div class="bm-source">Source: Optimal Health Research / Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">Vitamin D (25-OH)</td>
-      <td class="bm-val">64 ng/mL</td>
-      <td class="bm-range">30 – 100</td>
-      <td class="bm-frange">40 – 80</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Optimal >=30. Deficiency <20, Insufficiency 20–29.</div><div class="bm-source">Source: GrassrootsHealth / Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Zinc</td>
-      <td class="bm-val">128 mcg/dL</td>
-      <td class="bm-range">60 – 130</td>
-      <td class="bm-frange">80 – 110</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">Near upper limit of reference range.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Methylmalonic Acid</td>
-      <td class="bm-val">136 nmol/L</td>
-      <td class="bm-range">55 – 335</td>
-      <td class="bm-frange">55 – 200</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Functional marker of B12 status. Normal MMA = adequate B12 function.</div><div class="bm-source">Source: Functional Medicine (B12 functional marker)</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Urinalysis</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Urine Specific Gravity</td>
-      <td class="bm-val">1.004</td>
-      <td class="bm-range">1.001 – 1.035</td>
-      <td class="bm-frange">1.01 – 1.025</td>
-      <td><span class="level-badge level-low">Low</span></td>
-      <td class="bm-detail"><div class="bm-note">Indicates dilute urine.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Urine pH</td>
-      <td class="bm-val">8</td>
-      <td class="bm-range">5.0 – 8.0</td>
-      <td class="bm-frange">6.0 – 7.5</td>
-      <td><span class="level-badge level-high">High</span></td>
-      <td class="bm-detail"><div class="bm-note">At upper limit. Alkaline urine.</div><div class="bm-source">Source: Functional Medicine</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section">
-    <h2 class="cat-title">Other</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th>Biomarker</th>
-          <th>Result</th>
-          <th>Lab Range</th>
-          <th>Functional Range</th>
-          <th>Level</th>
-          <th>Notes / Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">PSA, Total</td>
-      <td class="bm-val">0.5 ng/mL</td>
-      <td class="bm-range">≤ 4.0</td>
-      <td class="bm-frange">≤ 1.5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reference <=4.0. Very low.</div><div class="bm-source">Source: Functional Medicine (men under 50)</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">PSA, Free</td>
-      <td class="bm-val">0.2 ng/mL</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Used in ratio with total PSA.</div></td>
-    </tr>
-    <tr class="bm-row status-optimal">
-      <td class="bm-name">PSA, % Free</td>
-      <td class="bm-val">40 %</td>
-      <td class="bm-range">≥ 25</td>
-      <td class="bm-frange">≥ 25</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reference >25%. 40% = very favorable.</div><div class="bm-source">Source: Quest Diagnostics</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Mercury, Blood</td>
-      <td class="bm-val">5 mcg/L</td>
-      <td class="bm-range">≤ 10</td>
-      <td class="bm-frange">≤ 5</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <5 mcg/L. Reference <=10.</div><div class="bm-source">Source: Functional Medicine / ICPMS</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Lead, Venous</td>
-      <td class="bm-val">1 mcg/dL</td>
-      <td class="bm-range">≤ 3.5</td>
-      <td class="bm-frange">≤ 2</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Reported as <1.0. Reference <3.5.</div><div class="bm-source">Source: Functional Medicine / CDC</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">ABO Blood Group</td>
-      <td class="bm-val">—</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">Blood type: A</div></td>
-    </tr>
-    <tr class="bm-row status-inrange">
-      <td class="bm-name">Rh Type</td>
-      <td class="bm-val">—</td>
-      <td class="bm-range">—</td>
-      <td class="bm-frange">—</td>
-      <td><span class="level-badge level-optimal">Optimal</span></td>
-      <td class="bm-detail"><div class="bm-note">RH(D) Positive</div></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
+<main>
+<section class="cat-section" data-cat="Iron Panel"><h2 class="cat-title">Iron Panel <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="iron, total iron panel  "><td class="bm-name" data-label="Biomarker">Iron, Total</td><td class="bm-val" data-label="Result">134 mcg/dL</td><td class="bm-range" data-label="Functional Range">85 – 130</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="iron binding capacity iron panel tibc. "><td class="bm-name" data-label="Biomarker">Iron Binding Capacity</td><td class="bm-val" data-label="Result">407 mcg/dL</td><td class="bm-range" data-label="Functional Range">250 – 370</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">TIBC.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="iron % saturation iron panel  "><td class="bm-name" data-label="Biomarker">Iron % Saturation</td><td class="bm-val" data-label="Result">33 %</td><td class="bm-range" data-label="Functional Range">25 – 45</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="ferritin iron panel flagged l. functional target 50-150. increase heme iron: beef, lamb, liver, oysters are the most bioavailable sources pair non-heme iron (spinach, legumes, pumpkin seeds) with vitamin c avoid coffee or tea within 1 hour of iron-rich meals consider iron bisglycinate 25–50 mg/day with vitamin c if dietary approach is insufficient note: trt increases rbc production and iron utilization — this may be a contributing factor retest ferritin in 8–12 weeks — target 75–100 ng/ml"><td class="bm-name" data-label="Biomarker">Ferritin</td><td class="bm-val" data-label="Result">32 ng/mL</td><td class="bm-range" data-label="Functional Range">50 – 150</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Functional target 50-150.</div><div class="bm-src">Source: Peter Attia MD</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Increase heme iron: beef, lamb, liver, oysters are the most bioavailable sources</li><li>Pair non-heme iron (spinach, legumes, pumpkin seeds) with vitamin C</li><li>Avoid coffee or tea within 1 hour of iron-rich meals</li><li>Consider iron bisglycinate 25–50 mg/day with vitamin C if dietary approach is insufficient</li><li>Note: TRT increases RBC production and iron utilization — this may be a contributing factor</li><li>Retest ferritin in 8–12 weeks — target 75–100 ng/mL</li></ul></details></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Lipid Panel"><h2 class="cat-title">Lipid Panel <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="cholesterol, total lipid panel flagged h. desirable <200. total cholesterol is elevated but context matters — hdl is excellent (63). non-hdl and ldl-p are the more actionable targets focus on ldl particle quality and count rather than total cholesterol alone reduce refined carbohydrates and added sugars (primary driver of high triglycerides and ldl-p) maintain current exercise and dietary fat quality discuss with physician: with ldl-p at 2253, pharmacological intervention is worth evaluating"><td class="bm-name" data-label="Biomarker">Cholesterol, Total</td><td class="bm-val" data-label="Result">239 mg/dL</td><td class="bm-range" data-label="Functional Range">< 200</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Desirable <200.</div><div class="bm-src">Source: AHA/ACC</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Total cholesterol is elevated but context matters — HDL is excellent (63). Non-HDL and LDL-P are the more actionable targets</li><li>Focus on LDL particle quality and count rather than total cholesterol alone</li><li>Reduce refined carbohydrates and added sugars (primary driver of high triglycerides and LDL-P)</li><li>Maintain current exercise and dietary fat quality</li><li>Discuss with physician: with LDL-P at 2253, pharmacological intervention is worth evaluating</li></ul></details></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="hdl cholesterol lipid panel  "><td class="bm-name" data-label="Biomarker">HDL Cholesterol</td><td class="bm-val" data-label="Result">63 mg/dL</td><td class="bm-range" data-label="Functional Range">> 50</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: AHA/ACC</div></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="triglycerides lipid panel flagged h. functional target <100. triglycerides at 187 reflect carbohydrate and alcohol metabolism — the most modifiable lipid fraction reduce refined carbohydrates, added sugars, and alcohol — these are the primary drivers increase omega-3 fatty acids: epa+dha at 3–4 g/day can reduce triglycerides by 20–40% ensure regular aerobic exercise — 150+ minutes/week significantly lowers triglycerides target: retest triglycerides in 3 months after dietary changes. goal: <100 mg/dl"><td class="bm-name" data-label="Biomarker">Triglycerides</td><td class="bm-val" data-label="Result">187 mg/dL</td><td class="bm-range" data-label="Functional Range">< 100</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <100.</div><div class="bm-src">Source: Peter Attia MD</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Triglycerides at 187 reflect carbohydrate and alcohol metabolism — the most modifiable lipid fraction</li><li>Reduce refined carbohydrates, added sugars, and alcohol — these are the primary drivers</li><li>Increase omega-3 fatty acids: EPA+DHA at 3–4 g/day can reduce triglycerides by 20–40%</li><li>Ensure regular aerobic exercise — 150+ minutes/week significantly lowers triglycerides</li><li>Target: retest triglycerides in 3 months after dietary changes. Goal: <100 mg/dL</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="ldl-cholesterol lipid panel flagged h. functional target <100. ldl-c of 144 combined with ldl-p of 2253 and pattern b represents significant cardiovascular risk reduce saturated fat (red meat, full-fat dairy, coconut oil) and shift to monounsaturated fats add soluble fiber: psyllium (10 g/day), oat bran, beans — binds cholesterol in the gut increase epa+dha omega-3s to 3–4 g/day physician discussion: statin therapy has strong evidence for ldl-c and ldl-p reduction retest in 3–6 months after lifestyle changes"><td class="bm-name" data-label="Biomarker">LDL-Cholesterol</td><td class="bm-val" data-label="Result">144 mg/dL</td><td class="bm-range" data-label="Functional Range">< 100</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <100.</div><div class="bm-src">Source: AHA/ACC</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LDL-C of 144 combined with LDL-P of 2253 and Pattern B represents significant cardiovascular risk</li><li>Reduce saturated fat (red meat, full-fat dairy, coconut oil) and shift to monounsaturated fats</li><li>Add soluble fiber: psyllium (10 g/day), oat bran, beans — binds cholesterol in the gut</li><li>Increase EPA+DHA omega-3s to 3–4 g/day</li><li>Physician discussion: statin therapy has strong evidence for LDL-C and LDL-P reduction</li><li>Retest in 3–6 months after lifestyle changes</li></ul></details></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="chol/hdlc ratio lipid panel  "><td class="bm-name" data-label="Biomarker">Chol/HDLC Ratio</td><td class="bm-val" data-label="Result">3.8 ratio</td><td class="bm-range" data-label="Functional Range">< 4.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: AHA/ACC</div></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="non-hdl cholesterol lipid panel flagged h. functional target <130. non-hdl of 176 reflects total atherogenic burden — all ldl + vldl + idl cholesterol most effectively lowered by reducing triglycerides (which lowers vldl contribution) reduce refined carbs and sugar, increase omega-3s, regular aerobic exercise improving triglycerides and ldl-c will both lower non-hdl"><td class="bm-name" data-label="Biomarker">Non-HDL Cholesterol</td><td class="bm-val" data-label="Result">176 mg/dL</td><td class="bm-range" data-label="Functional Range">< 130</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <130.</div><div class="bm-src">Source: AHA/ACC</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Non-HDL of 176 reflects total atherogenic burden — all LDL + VLDL + IDL cholesterol</li><li>Most effectively lowered by reducing triglycerides (which lowers VLDL contribution)</li><li>Reduce refined carbs and sugar, increase omega-3s, regular aerobic exercise</li><li>Improving triglycerides and LDL-C will both lower non-HDL</li></ul></details></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="lipoprotein (a) lipid panel  "><td class="bm-name" data-label="Biomarker">Lipoprotein (a)</td><td class="bm-val" data-label="Result">26 nmol/L</td><td class="bm-range" data-label="Functional Range">< 75</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Function Health</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Lipoprotein Fractionation"><h2 class="cat-title">Lipoprotein Fractionation <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="ldl particle number lipoprotein fractionation flagged h. functional target <1000. high cardiovascular risk. ldl-p of 2253 nmol/l is in the high cardiovascular risk category (>1409 is high risk) this is zachs most important modifiable long-term cardiovascular risk factor priority: reduce refined carbohydrates and sugar — the primary driver of small, dense ldl increase soluble fiber to 15–20 g/day and epa+dha to 3–4 g/day physician discussion: statin therapy is highly effective for ldl-p reduction retest lipoprotein fractionation in 3–6 months after lifestyle changes"><td class="bm-name" data-label="Biomarker">LDL Particle Number</td><td class="bm-val" data-label="Result">2253 nmol/L</td><td class="bm-range" data-label="Functional Range">< 1000</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <1000. High cardiovascular risk.</div><div class="bm-src">Source: Peter Attia MD</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LDL-P of 2253 nmol/L is in the high cardiovascular risk category (>1409 is high risk)</li><li>This is Zach's most important modifiable long-term cardiovascular risk factor</li><li>Priority: reduce refined carbohydrates and sugar — the primary driver of small, dense LDL</li><li>Increase soluble fiber to 15–20 g/day and EPA+DHA to 3–4 g/day</li><li>Physician discussion: statin therapy is highly effective for LDL-P reduction</li><li>Retest lipoprotein fractionation in 3–6 months after lifestyle changes</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="ldl small lipoprotein fractionation flagged h. functional target <90. most atherogenic fraction. ldl small at 524 nmol/l is well above the high-risk threshold — the most atherogenic fraction this, combined with pattern b classification, is the most clinically actionable lipid finding reduce fructose and refined carbohydrates — these specifically drive small ldl production high-dose fish oil (3–4 g/day epa+dha) shifts ldl from small/dense toward larger particles aerobic exercise consistently improves ldl particle size over 3–6 months retest with full lipoprotein panel after dietary intervention"><td class="bm-name" data-label="Biomarker">LDL Small</td><td class="bm-val" data-label="Result">524 nmol/L</td><td class="bm-range" data-label="Functional Range">< 90</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <90. Most atherogenic fraction.</div><div class="bm-src">Source: Cleveland HeartLab</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LDL Small at 524 nmol/L is well above the high-risk threshold — the most atherogenic fraction</li><li>This, combined with Pattern B classification, is the most clinically actionable lipid finding</li><li>Reduce fructose and refined carbohydrates — these specifically drive small LDL production</li><li>High-dose fish oil (3–4 g/day EPA+DHA) shifts LDL from small/dense toward larger particles</li><li>Aerobic exercise consistently improves LDL particle size over 3–6 months</li><li>Retest with full lipoprotein panel after dietary intervention</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="ldl medium lipoprotein fractionation flagged h. functional target <90. ldl medium at 379 nmol/l adds to overall particle burden alongside small ldl same dietary approach: reduce refined carbs, increase fiber and omega-3s this should improve in parallel with ldl small as the underlying carbohydrate metabolism improves"><td class="bm-name" data-label="Biomarker">LDL Medium</td><td class="bm-val" data-label="Result">379 nmol/L</td><td class="bm-range" data-label="Functional Range">< 90</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <90.</div><div class="bm-src">Source: Cleveland HeartLab</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LDL Medium at 379 nmol/L adds to overall particle burden alongside small LDL</li><li>Same dietary approach: reduce refined carbs, increase fiber and omega-3s</li><li>This should improve in parallel with LDL Small as the underlying carbohydrate metabolism improves</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="hdl large lipoprotein fractionation flagged l. functional target >7000. large hdl at 6047 nmol/l is below the 7000 target — functional hdl quality is reduced aerobic exercise is the most effective intervention for increasing large, functional hdl niacin (extended-release, if tolerated) specifically raises large hdl — discuss with physician reducing refined carbohydrates and improving triglycerides also supports hdl quality"><td class="bm-name" data-label="Biomarker">HDL Large</td><td class="bm-val" data-label="Result">6047 nmol/L</td><td class="bm-range" data-label="Functional Range">> 7000</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Functional target >7000.</div><div class="bm-src">Source: Cleveland HeartLab</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Large HDL at 6047 nmol/L is below the 7000 target — functional HDL quality is reduced</li><li>Aerobic exercise is the most effective intervention for increasing large, functional HDL</li><li>Niacin (extended-release, if tolerated) specifically raises large HDL — discuss with physician</li><li>Reducing refined carbohydrates and improving triglycerides also supports HDL quality</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="ldl pattern lipoprotein fractionation pattern b — predominantly small dense ldl. higher cardiovascular risk. pattern b — predominantly small, dense ldl — carries ~3x higher cardiovascular risk than pattern a pattern b can be improved: reduce refined carbohydrates and fructose, increase omega-3s regular aerobic exercise and fiber intake both promote a shift to pattern a statins reduce ldl-p but niacin or fibrates more specifically shift ldl pattern retest after 3–6 months of dietary and lifestyle changes"><td class="bm-name" data-label="Biomarker">LDL Pattern</td><td class="bm-val" data-label="Result">—</td><td class="bm-range" data-label="Functional Range">—</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Pattern B — predominantly small dense LDL. Higher cardiovascular risk.</div><div class="bm-src">Source: Cleveland HeartLab</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Pattern B — predominantly small, dense LDL — carries ~3x higher cardiovascular risk than Pattern A</li><li>Pattern B can be improved: reduce refined carbohydrates and fructose, increase omega-3s</li><li>Regular aerobic exercise and fiber intake both promote a shift to Pattern A</li><li>Statins reduce LDL-P but niacin or fibrates more specifically shift LDL pattern</li><li>Retest after 3–6 months of dietary and lifestyle changes</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="ldl peak size lipoprotein fractionation flagged l. functional target >222.9 nm. high risk pattern. ldl peak size of 209.7 nm is in the high-risk category (<217.4 nm) this is consistent with pattern b and high ldl-p — small, dense particles throughout same interventions: reduce refined carbs, increase soluble fiber and omega-3s this marker should improve as ldl small and medium improve with intervention"><td class="bm-name" data-label="Biomarker">LDL Peak Size</td><td class="bm-val" data-label="Result">209.7 nm</td><td class="bm-range" data-label="Functional Range">> 222.9</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Functional target >222.9 nm. High risk pattern.</div><div class="bm-src">Source: Cleveland HeartLab</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LDL Peak Size of 209.7 nm is in the high-risk category (<217.4 nm)</li><li>This is consistent with Pattern B and high LDL-P — small, dense particles throughout</li><li>Same interventions: reduce refined carbs, increase soluble fiber and omega-3s</li><li>This marker should improve as LDL Small and Medium improve with intervention</li></ul></details></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Cardiovascular"><h2 class="cat-title">Cardiovascular <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="homocysteine cardiovascular excellent level. "><td class="bm-name" data-label="Biomarker">Homocysteine</td><td class="bm-val" data-label="Result">4.6 umol/L</td><td class="bm-range" data-label="Functional Range">< 8.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Excellent level.</div><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="apolipoprotein b cardiovascular flagged h. functional target <80. moderate cardiovascular risk. apob of 123 — combined with ldl-p 2253 — confirms a high atherogenic particle burden this is a priority long-term intervention alongside triglycerides and ldl-p reduce refined carbohydrates and sugar — primary driver of elevated apob add soluble fiber (psyllium, oats, legumes), increase epa+dha to 3–4 g/day physician discussion: statin + ezetimibe is highly effective for apob reduction retest apob and full lipoprotein panel in 3–6 months"><td class="bm-name" data-label="Biomarker">Apolipoprotein B</td><td class="bm-val" data-label="Result">123 mg/dL</td><td class="bm-range" data-label="Functional Range">< 80</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Functional target <80. Moderate cardiovascular risk.</div><div class="bm-src">Source: AHA/ACC</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>ApoB of 123 — combined with LDL-P 2253 — confirms a high atherogenic particle burden</li><li>This is a priority long-term intervention alongside triglycerides and LDL-P</li><li>Reduce refined carbohydrates and sugar — primary driver of elevated ApoB</li><li>Add soluble fiber (psyllium, oats, legumes), increase EPA+DHA to 3–4 g/day</li><li>Physician discussion: statin + ezetimibe is highly effective for ApoB reduction</li><li>Retest ApoB and full lipoprotein panel in 3–6 months</li></ul></details></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Liver"><h2 class="cat-title">Liver</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="ggt liver  "><td class="bm-name" data-label="Biomarker">GGT</td><td class="bm-val" data-label="Result">18 U/L</td><td class="bm-range" data-label="Functional Range">< 25</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="protein, total liver  "><td class="bm-name" data-label="Biomarker">Protein, Total</td><td class="bm-val" data-label="Result">7.6 g/dL</td><td class="bm-range" data-label="Functional Range">6.9 – 7.4</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="albumin liver  "><td class="bm-name" data-label="Biomarker">Albumin</td><td class="bm-val" data-label="Result">4.9 g/dL</td><td class="bm-range" data-label="Functional Range">4.0 – 5.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="globulin liver  "><td class="bm-name" data-label="Biomarker">Globulin</td><td class="bm-val" data-label="Result">2.7 g/dL</td><td class="bm-range" data-label="Functional Range">2.2 – 3.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="albumin/globulin ratio liver  "><td class="bm-name" data-label="Biomarker">Albumin/Globulin Ratio</td><td class="bm-val" data-label="Result">1.8 ratio</td><td class="bm-range" data-label="Functional Range">1.0 – 2.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="bilirubin, total liver  "><td class="bm-name" data-label="Biomarker">Bilirubin, Total</td><td class="bm-val" data-label="Result">0.6 mg/dL</td><td class="bm-range" data-label="Functional Range">0.2 – 1.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="alkaline phosphatase liver near upper limit. "><td class="bm-name" data-label="Biomarker">Alkaline Phosphatase</td><td class="bm-val" data-label="Result">124 U/L</td><td class="bm-range" data-label="Functional Range">40 – 100</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Near upper limit.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="ast liver  "><td class="bm-name" data-label="Biomarker">AST</td><td class="bm-val" data-label="Result">23 U/L</td><td class="bm-range" data-label="Functional Range">10 – 25</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="alt liver  "><td class="bm-name" data-label="Biomarker">ALT</td><td class="bm-val" data-label="Result">23 U/L</td><td class="bm-range" data-label="Functional Range">10 – 25</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Kidney"><h2 class="cat-title">Kidney</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="bun (urea nitrogen) kidney  "><td class="bm-name" data-label="Biomarker">BUN (Urea Nitrogen)</td><td class="bm-val" data-label="Result">16 mg/dL</td><td class="bm-range" data-label="Functional Range">10 – 18</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="creatinine kidney  "><td class="bm-name" data-label="Biomarker">Creatinine</td><td class="bm-val" data-label="Result">1.17 mg/dL</td><td class="bm-range" data-label="Functional Range">0.7 – 1.1</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="egfr kidney functional target ≥90. mildly reduced. "><td class="bm-name" data-label="Biomarker">eGFR</td><td class="bm-val" data-label="Result">79 mL/min/1.73m²</td><td class="bm-range" data-label="Functional Range">> 90</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target ≥90. Mildly reduced.</div><div class="bm-src">Source: KDIGO</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="albumin, urine kidney reported as <0.2. no albuminuria detected. "><td class="bm-name" data-label="Biomarker">Albumin, Urine</td><td class="bm-val" data-label="Result">—</td><td class="bm-range" data-label="Functional Range">< 2.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Reported as <0.2. No albuminuria detected.</div><div class="bm-src">Source: KDIGO</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Metabolic"><h2 class="cat-title">Metabolic <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="uric acid metabolic functional target <5.5. "><td class="bm-name" data-label="Biomarker">Uric Acid</td><td class="bm-val" data-label="Result">4.8 mg/dL</td><td class="bm-range" data-label="Functional Range">< 5.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target <5.5.</div><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="glucose metabolic  "><td class="bm-name" data-label="Biomarker">Glucose</td><td class="bm-val" data-label="Result">88 mg/dL</td><td class="bm-range" data-label="Functional Range">72 – 90</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="sodium metabolic  "><td class="bm-name" data-label="Biomarker">Sodium</td><td class="bm-val" data-label="Result">138 mmol/L</td><td class="bm-range" data-label="Functional Range">136 – 142</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="potassium metabolic  "><td class="bm-name" data-label="Biomarker">Potassium</td><td class="bm-val" data-label="Result">4.2 mmol/L</td><td class="bm-range" data-label="Functional Range">4.0 – 4.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="chloride metabolic flagged l — 1 point below low normal (98). minimal clinical significance. chloride of 97 is 1 point below the lab lower limit — minimal clinical significance ensure adequate sodium and hydration — chloride typically follows sodium no specific intervention needed — recheck on next panel to confirm it was transient"><td class="bm-name" data-label="Biomarker">Chloride</td><td class="bm-val" data-label="Result">97 mmol/L</td><td class="bm-range" data-label="Functional Range">100 – 108</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L — 1 point below low normal (98). Minimal clinical significance.</div><div class="bm-src">Source: Functional Medicine</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Chloride of 97 is 1 point below the lab lower limit — minimal clinical significance</li><li>Ensure adequate sodium and hydration — chloride typically follows sodium</li><li>No specific intervention needed — recheck on next panel to confirm it was transient</li></ul></details></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="carbon dioxide metabolic  "><td class="bm-name" data-label="Biomarker">Carbon Dioxide</td><td class="bm-val" data-label="Result">29 mmol/L</td><td class="bm-range" data-label="Functional Range">25 – 29</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="calcium metabolic  "><td class="bm-name" data-label="Biomarker">Calcium</td><td class="bm-val" data-label="Result">9.9 mg/dL</td><td class="bm-range" data-label="Functional Range">9.0 – 10.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="insulin metabolic excellent insulin sensitivity. "><td class="bm-name" data-label="Biomarker">Insulin</td><td class="bm-val" data-label="Result">3.8 uIU/mL</td><td class="bm-range" data-label="Functional Range">2 – 8</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Excellent insulin sensitivity.</div><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="hemoglobin a1c metabolic  "><td class="bm-name" data-label="Biomarker">Hemoglobin A1c</td><td class="bm-val" data-label="Result">5.1 %</td><td class="bm-range" data-label="Functional Range">< 5.2</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="amylase metabolic  "><td class="bm-name" data-label="Biomarker">Amylase</td><td class="bm-val" data-label="Result">64 U/L</td><td class="bm-range" data-label="Functional Range">25 – 90</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="lipase metabolic  "><td class="bm-name" data-label="Biomarker">Lipase</td><td class="bm-val" data-label="Result">24 U/L</td><td class="bm-range" data-label="Functional Range">10 – 60</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="CBC"><h2 class="cat-title">CBC <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="wbc cbc  "><td class="bm-name" data-label="Biomarker">WBC</td><td class="bm-val" data-label="Result">5.5 K/uL</td><td class="bm-range" data-label="Functional Range">5.0 – 8.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="rbc cbc upper end — consistent with trt. "><td class="bm-name" data-label="Biomarker">RBC</td><td class="bm-val" data-label="Result">5.61 M/uL</td><td class="bm-range" data-label="Functional Range">4.5 – 5.5</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Upper end — consistent with TRT.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="hemoglobin cbc flagged h. context: testosterone therapy. monitor hematocrit trend. hemoglobin of 17.4 is slightly above the lab upper limit — likely trt-driven erythrocytosis monitor hematocrit trend: values above 52% increase blood viscosity and clotting risk ensure adequate hydration (dehydration concentrates hemoglobin artificially) discuss with trt prescriber: if hematocrit exceeds 52%, therapeutic phlebotomy may be recommended aspirin (if not contraindicated) is sometimes used to reduce clot risk with elevated hematocrit"><td class="bm-name" data-label="Biomarker">Hemoglobin</td><td class="bm-val" data-label="Result">17.4 g/dL</td><td class="bm-range" data-label="Functional Range">14.0 – 17.0</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. Context: testosterone therapy. Monitor hematocrit trend.</div><div class="bm-src">Source: Functional Medicine</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Hemoglobin of 17.4 is slightly above the lab upper limit — likely TRT-driven erythrocytosis</li><li>Monitor hematocrit trend: values above 52% increase blood viscosity and clotting risk</li><li>Ensure adequate hydration (dehydration concentrates hemoglobin artificially)</li><li>Discuss with TRT prescriber: if hematocrit exceeds 52%, therapeutic phlebotomy may be recommended</li><li>Aspirin (if not contraindicated) is sometimes used to reduce clot risk with elevated hematocrit</li></ul></details></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="hematocrit cbc near upper limit. consistent with elevated hgb. "><td class="bm-name" data-label="Biomarker">Hematocrit</td><td class="bm-val" data-label="Result">50.7 %</td><td class="bm-range" data-label="Functional Range">40.0 – 50.0</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Near upper limit. Consistent with elevated Hgb.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="mcv cbc  "><td class="bm-name" data-label="Biomarker">MCV</td><td class="bm-val" data-label="Result">90.4 fL</td><td class="bm-range" data-label="Functional Range">82 – 92</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="mch cbc  "><td class="bm-name" data-label="Biomarker">MCH</td><td class="bm-val" data-label="Result">31 pg</td><td class="bm-range" data-label="Functional Range">27 – 32</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="mchc cbc  "><td class="bm-name" data-label="Biomarker">MCHC</td><td class="bm-val" data-label="Result">34.3 g/dL</td><td class="bm-range" data-label="Functional Range">32 – 36</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="rdw cbc functional target ≤13.0. "><td class="bm-name" data-label="Biomarker">RDW</td><td class="bm-val" data-label="Result">13.5 %</td><td class="bm-range" data-label="Functional Range">< 13.0</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target ≤13.0.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="platelet count cbc  "><td class="bm-name" data-label="Biomarker">Platelet Count</td><td class="bm-val" data-label="Result">235 K/uL</td><td class="bm-range" data-label="Functional Range">155 – 350</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="mpv cbc  "><td class="bm-name" data-label="Biomarker">MPV</td><td class="bm-val" data-label="Result">10.5 fL</td><td class="bm-range" data-label="Functional Range">7.5 – 12.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="absolute neutrophils cbc  "><td class="bm-name" data-label="Biomarker">Absolute Neutrophils</td><td class="bm-val" data-label="Result">3333 cells/uL</td><td class="bm-range" data-label="Functional Range">2000 – 7000</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="absolute lymphocytes cbc  "><td class="bm-name" data-label="Biomarker">Absolute Lymphocytes</td><td class="bm-val" data-label="Result">1133 cells/uL</td><td class="bm-range" data-label="Functional Range">1500 – 4000</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="absolute monocytes cbc  "><td class="bm-name" data-label="Biomarker">Absolute Monocytes</td><td class="bm-val" data-label="Result">402 cells/uL</td><td class="bm-range" data-label="Functional Range">200 – 1000</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row oor" data-level="high" data-status="out-of-range" data-search="absolute eosinophils cbc flagged h. may indicate allergic response, parasitic infection, or environmental trigger. eosinophils at 583 suggest allergic load, environmental triggers, or parasitic exposure consider allergy testing: ige panel for common environmental allergens (dust mites, mold, pollen) dietary elimination trial: dairy and gluten are common eosinophil triggers review nasal/respiratory symptoms — seasonal allergies are a common cause stool ova and parasite testing if travel history or gi symptoms present recheck on next panel — a single elevated reading may be transient (timing with allergen season)"><td class="bm-name" data-label="Biomarker">Absolute Eosinophils</td><td class="bm-val" data-label="Result">583 cells/uL</td><td class="bm-range" data-label="Functional Range">50 – 500</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged H. May indicate allergic response, parasitic infection, or environmental trigger.</div><div class="bm-src">Source: Functional Medicine</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>Eosinophils at 583 suggest allergic load, environmental triggers, or parasitic exposure</li><li>Consider allergy testing: IgE panel for common environmental allergens (dust mites, mold, pollen)</li><li>Dietary elimination trial: dairy and gluten are common eosinophil triggers</li><li>Review nasal/respiratory symptoms — seasonal allergies are a common cause</li><li>Stool ova and parasite testing if travel history or GI symptoms present</li><li>Recheck on next panel — a single elevated reading may be transient (timing with allergen season)</li></ul></details></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="absolute basophils cbc  "><td class="bm-name" data-label="Biomarker">Absolute Basophils</td><td class="bm-val" data-label="Result">50 cells/uL</td><td class="bm-range" data-label="Functional Range">0 – 100</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Inflammation"><h2 class="cat-title">Inflammation</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="ana screen, ifa inflammation negative. no ana-associated autoimmune disease. "><td class="bm-name" data-label="Biomarker">ANA Screen, IFA</td><td class="bm-val" data-label="Result">—</td><td class="bm-range" data-label="Functional Range">—</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">NEGATIVE. No ANA-associated autoimmune disease.</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="rheumatoid factor inflammation  "><td class="bm-name" data-label="Biomarker">Rheumatoid Factor</td><td class="bm-val" data-label="Result">10 IU/mL</td><td class="bm-range" data-label="Functional Range">< 14</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="hs-crp inflammation  "><td class="bm-name" data-label="Biomarker">hs-CRP</td><td class="bm-val" data-label="Result">0.2 mg/L</td><td class="bm-range" data-label="Functional Range">< 1.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: AHA/ACC</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Thyroid"><h2 class="cat-title">Thyroid</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="thyroglobulin antibodies thyroid  "><td class="bm-name" data-label="Biomarker">Thyroglobulin Antibodies</td><td class="bm-val" data-label="Result">2 IU/mL</td><td class="bm-range" data-label="Functional Range">< 4</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="thyroid peroxidase antibodies thyroid  "><td class="bm-name" data-label="Biomarker">Thyroid Peroxidase Antibodies</td><td class="bm-val" data-label="Result">1 IU/mL</td><td class="bm-range" data-label="Functional Range">< 2</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="tsh thyroid  "><td class="bm-name" data-label="Biomarker">TSH</td><td class="bm-val" data-label="Result">1.73 mIU/L</td><td class="bm-range" data-label="Functional Range">1.0 – 2.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="t4, free thyroid  "><td class="bm-name" data-label="Biomarker">T4, Free</td><td class="bm-val" data-label="Result">1.4 ng/dL</td><td class="bm-range" data-label="Functional Range">1.0 – 1.5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="t3, free thyroid  "><td class="bm-name" data-label="Biomarker">T3, Free</td><td class="bm-val" data-label="Result">3.5 pg/mL</td><td class="bm-range" data-label="Functional Range">3.0 – 4.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Hormones"><h2 class="cat-title">Hormones <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="low" data-status="in-range" data-search="leptin hormones at lower limit — consistent with very lean body composition. "><td class="bm-name" data-label="Biomarker">Leptin</td><td class="bm-val" data-label="Result">0.3 ng/mL</td><td class="bm-range" data-label="Functional Range">1.0 – 9.0</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">At lower limit — consistent with very lean body composition.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="cortisol, total hormones 8am draw. functional target 10-20. "><td class="bm-name" data-label="Biomarker">Cortisol, Total</td><td class="bm-val" data-label="Result">12.8 mcg/dL</td><td class="bm-range" data-label="Functional Range">10 – 20</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">8am draw. Functional target 10-20.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="dhea sulfate hormones functional target 150-500. below functional optimal. "><td class="bm-name" data-label="Biomarker">DHEA Sulfate</td><td class="bm-val" data-label="Result">130 mcg/dL</td><td class="bm-range" data-label="Functional Range">150 – 500</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target 150-500. Below functional optimal.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="fsh hormones flagged l. expected on trt — pituitary suppression. fsh suppression is expected and normal on testosterone replacement therapy (trt) exogenous testosterone signals the pituitary to stop producing fsh and lh no action needed unless fertility preservation is a goal — in that case, discuss hcg with trt prescriber this finding does not represent pathology in the context of trt"><td class="bm-name" data-label="Biomarker">FSH</td><td class="bm-val" data-label="Result">0.7 mIU/mL</td><td class="bm-range" data-label="Functional Range">1.5 – 12.4</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Expected on TRT — pituitary suppression.</div><div class="bm-src">Source: Functional Medicine</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>FSH suppression is expected and normal on testosterone replacement therapy (TRT)</li><li>Exogenous testosterone signals the pituitary to stop producing FSH and LH</li><li>No action needed unless fertility preservation is a goal — in that case, discuss HCG with TRT prescriber</li><li>This finding does not represent pathology in the context of TRT</li></ul></details></td></tr>
+<tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="lh hormones flagged l. expected on trt — pituitary suppression. lh suppression is expected and normal on testosterone replacement therapy (trt) same mechanism as fsh — exogenous testosterone creates negative feedback at the pituitary no action needed unless fertility is a concern — hcg can preserve lh-like signaling this finding does not represent pathology in the context of trt"><td class="bm-name" data-label="Biomarker">LH</td><td class="bm-val" data-label="Result">0.2 mIU/mL</td><td class="bm-range" data-label="Functional Range">1.7 – 8.6</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Expected on TRT — pituitary suppression.</div><div class="bm-src">Source: Functional Medicine</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>LH suppression is expected and normal on testosterone replacement therapy (TRT)</li><li>Same mechanism as FSH — exogenous testosterone creates negative feedback at the pituitary</li><li>No action needed unless fertility is a concern — HCG can preserve LH-like signaling</li><li>This finding does not represent pathology in the context of TRT</li></ul></details></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="prolactin hormones  "><td class="bm-name" data-label="Biomarker">Prolactin</td><td class="bm-val" data-label="Result">4.7 ng/mL</td><td class="bm-range" data-label="Functional Range">2 – 15</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="estradiol hormones reported as <30. "><td class="bm-name" data-label="Biomarker">Estradiol</td><td class="bm-val" data-label="Result">30 pg/mL</td><td class="bm-range" data-label="Functional Range">20 – 30</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Reported as <30.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="shbg hormones near upper limit. "><td class="bm-name" data-label="Biomarker">SHBG</td><td class="bm-val" data-label="Result">45 nmol/L</td><td class="bm-range" data-label="Functional Range">20 – 45</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Near upper limit.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="testosterone, total hormones upper-normal range on trt. "><td class="bm-name" data-label="Biomarker">Testosterone, Total</td><td class="bm-val" data-label="Result">815 ng/dL</td><td class="bm-range" data-label="Functional Range">600 – 900</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Upper-normal range on TRT.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="testosterone, free hormones  "><td class="bm-name" data-label="Biomarker">Testosterone, Free</td><td class="bm-val" data-label="Result">134.7 pg/mL</td><td class="bm-range" data-label="Functional Range">70 – 130</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Vitamins & Minerals"><h2 class="cat-title">Vitamins & Minerals</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="low" data-status="in-range" data-search="magnesium, rbc vitamins & minerals functional target >5.2. below functional optimal. "><td class="bm-name" data-label="Biomarker">Magnesium, RBC</td><td class="bm-val" data-label="Result">4.6 mg/dL</td><td class="bm-range" data-label="Functional Range">> 5.2</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target >5.2. Below functional optimal.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="vitamin d (25-oh) vitamins & minerals  "><td class="bm-name" data-label="Biomarker">Vitamin D (25-OH)</td><td class="bm-val" data-label="Result">64 ng/mL</td><td class="bm-range" data-label="Functional Range">40 – 80</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Peter Attia MD</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="zinc vitamins & minerals near upper limit. balance with copper if supplementing. "><td class="bm-name" data-label="Biomarker">Zinc</td><td class="bm-val" data-label="Result">128 mcg/dL</td><td class="bm-range" data-label="Functional Range">80 – 110</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Near upper limit. Balance with copper if supplementing.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="methylmalonic acid vitamins & minerals normal b12 function. "><td class="bm-name" data-label="Biomarker">Methylmalonic Acid</td><td class="bm-val" data-label="Result">136 nmol/L</td><td class="bm-range" data-label="Functional Range">< 250</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Normal B12 function.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Omega Fatty Acids"><h2 class="cat-title">Omega Fatty Acids <span class="cat-flag">!</span></h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row oor" data-level="low" data-status="out-of-range" data-search="omegacheck (epa+dpa+dha) omega fatty acids flagged l. functional target >5.5. borderline low. omegacheck at 5.4% is borderline — the target for cardiovascular protection is >5.5% increase fatty fish consumption: salmon, mackerel, sardines, anchovies (3–4 servings/week) consider epa+dha supplement 2–3 g/day — fish oil, krill oil, or algal oil (all effective) retest in 90 days after supplementation — this marker responds reliably to omega-3 intake given the high triglycerides and ldl-p, reaching 7-8% omegacheck is a priority"><td class="bm-name" data-label="Biomarker">OmegaCheck (EPA+DPA+DHA)</td><td class="bm-val" data-label="Result">5.4 %</td><td class="bm-range" data-label="Functional Range">> 5.5</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Flagged L. Functional target >5.5. Borderline low.</div><div class="bm-src">Source: Function Health</div><details class="action-details"><summary class="action-summary">Actions for Zach</summary><ul class="action-list"><li>OmegaCheck at 5.4% is borderline — the target for cardiovascular protection is >5.5%</li><li>Increase fatty fish consumption: salmon, mackerel, sardines, anchovies (3–4 servings/week)</li><li>Consider EPA+DHA supplement 2–3 g/day — fish oil, krill oil, or algal oil (all effective)</li><li>Retest in 90 days after supplementation — this marker responds reliably to omega-3 intake</li><li>Given the high triglycerides and LDL-P, reaching 7-8% OmegaCheck is a priority</li></ul></details></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="epa omega fatty acids  "><td class="bm-name" data-label="Biomarker">EPA</td><td class="bm-val" data-label="Result">0.8 %</td><td class="bm-range" data-label="Functional Range">> 1.0</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="dpa omega fatty acids  "><td class="bm-name" data-label="Biomarker">DPA</td><td class="bm-val" data-label="Result">1.6 %</td><td class="bm-range" data-label="Functional Range">0.5 – 1.8</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="dha omega fatty acids  "><td class="bm-name" data-label="Biomarker">DHA</td><td class="bm-val" data-label="Result">3 %</td><td class="bm-range" data-label="Functional Range">> 3.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="omega-3 total omega fatty acids  "><td class="bm-name" data-label="Biomarker">Omega-3 Total</td><td class="bm-val" data-label="Result">5.4 %</td><td class="bm-range" data-label="Functional Range">> 5.5</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="omega-6 total omega fatty acids functional target <30%. slightly above. "><td class="bm-name" data-label="Biomarker">Omega-6 Total</td><td class="bm-val" data-label="Result">32.6 %</td><td class="bm-range" data-label="Functional Range">< 30</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Functional target <30%. Slightly above.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="arachidonic acid omega fatty acids  "><td class="bm-name" data-label="Biomarker">Arachidonic Acid</td><td class="bm-val" data-label="Result">8.8 %</td><td class="bm-range" data-label="Functional Range">7 – 12</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="low" data-status="in-range" data-search="linoleic acid omega fatty acids near lower functional boundary 20%. "><td class="bm-name" data-label="Biomarker">Linoleic Acid</td><td class="bm-val" data-label="Result">18.9 %</td><td class="bm-range" data-label="Functional Range">20 – 28</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Near lower functional boundary 20%.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="arachidonic acid/epa ratio omega fatty acids  "><td class="bm-name" data-label="Biomarker">Arachidonic Acid/EPA Ratio</td><td class="bm-val" data-label="Result">10.5 ratio</td><td class="bm-range" data-label="Functional Range">< 11</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="omega-6/omega-3 ratio omega fatty acids at upper functional boundary. "><td class="bm-name" data-label="Biomarker">Omega-6/Omega-3 Ratio</td><td class="bm-val" data-label="Result">6 ratio</td><td class="bm-range" data-label="Functional Range">< 6.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">At upper functional boundary.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Male Health"><h2 class="cat-title">Male Health</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="psa, total male health  "><td class="bm-name" data-label="Biomarker">PSA, Total</td><td class="bm-val" data-label="Result">0.5 ng/mL</td><td class="bm-range" data-label="Functional Range">< 1.0</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: AUA</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="psa, free male health  "><td class="bm-name" data-label="Biomarker">PSA, Free</td><td class="bm-val" data-label="Result">0.2 ng/mL</td><td class="bm-range" data-label="Functional Range">—</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"></td></tr>
+<tr class="bm-row opt-row" data-level="optimal" data-status="optimal" data-search="psa, % free male health  "><td class="bm-name" data-label="Biomarker">PSA, % Free</td><td class="bm-val" data-label="Result">40 %</td><td class="bm-range" data-label="Functional Range">> 25</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: AUA</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Heavy Metals"><h2 class="cat-title">Heavy Metals</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="mercury, blood heavy metals  "><td class="bm-name" data-label="Biomarker">Mercury, Blood</td><td class="bm-val" data-label="Result">5 mcg/L</td><td class="bm-range" data-label="Functional Range">< 5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: EPA</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="lead, venous heavy metals  "><td class="bm-name" data-label="Biomarker">Lead, Venous</td><td class="bm-val" data-label="Result">1 mcg/dL</td><td class="bm-range" data-label="Functional Range">< 5</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-src">Source: CDC</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Urinalysis"><h2 class="cat-title">Urinalysis</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="low" data-status="in-range" data-search="urine specific gravity urinalysis dilute urine at time of collection. "><td class="bm-name" data-label="Biomarker">Urine Specific Gravity</td><td class="bm-val" data-label="Result">1.004</td><td class="bm-range" data-label="Functional Range">1.01 – 1.025</td><td data-label="Level"><span class="level-badge badge-low">Low</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Dilute urine at time of collection.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+<tr class="bm-row " data-level="high" data-status="in-range" data-search="urine ph urinalysis at upper limit. alkaline. "><td class="bm-name" data-label="Biomarker">Urine pH</td><td class="bm-val" data-label="Result">8</td><td class="bm-range" data-label="Functional Range">6.0 – 7.5</td><td data-label="Level"><span class="level-badge badge-high">High</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">At upper limit. Alkaline.</div><div class="bm-src">Source: Functional Medicine</div></td></tr>
+</tbody></table></div></section>
+<section class="cat-section" data-cat="Other"><h2 class="cat-title">Other</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th>Biomarker</th><th>Result</th><th>Functional Range</th><th>Level</th><th>Notes &amp; Actions</th></tr></thead><tbody><tr class="bm-row " data-level="optimal" data-status="in-range" data-search="abo blood group other blood type a. "><td class="bm-name" data-label="Biomarker">ABO Blood Group</td><td class="bm-val" data-label="Result">—</td><td class="bm-range" data-label="Functional Range">—</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Blood type A.</div></td></tr>
+<tr class="bm-row " data-level="optimal" data-status="in-range" data-search="rh type other rh positive. "><td class="bm-name" data-label="Biomarker">Rh Type</td><td class="bm-val" data-label="Result">—</td><td class="bm-range" data-label="Functional Range">—</td><td data-label="Level"><span class="level-badge badge-opt">Optimal</span></td><td class="bm-detail" data-label="Notes & Actions"><div class="bm-note">Rh Positive.</div></td></tr>
+</tbody></table></div></section>
+
 </main>
 
 <footer>
-  Report generated May 3, 2026 &nbsp;·&nbsp; Functional thresholds from functional medicine literature and cited sources &nbsp;·&nbsp; Not medical advice
+  <a href="../../">&#8592; Back to index</a> &nbsp;·&nbsp;
+  Generated May 6, 2026 &nbsp;·&nbsp;
+  Functional thresholds from published functional medicine literature &nbsp;·&nbsp;
+  Not medical advice
 </footer>
 
+<script>
+(function() {
+  const rows = Array.from(document.querySelectorAll('.bm-row'));
+  const sections = Array.from(document.querySelectorAll('.cat-section'));
+  const pills = Array.from(document.querySelectorAll('.pill'));
+  const searchEl = document.getElementById('search');
+  const countEl = document.getElementById('result-count');
+  let activeFilter = 'all', activeSearch = '';
+  function match(row) {
+    const level = row.dataset.level;
+    const status = row.dataset.status;
+    const text = row.dataset.search || '';
+    const filterOk = activeFilter === 'all' || activeFilter === level
+      || (activeFilter === 'out-of-range' && status === 'out-of-range');
+    return filterOk && (!activeSearch || text.includes(activeSearch));
+  }
+  function update() {
+    let visible = 0;
+    rows.forEach(r => { const show = match(r); r.classList.toggle('hidden', !show); if (show) visible++; });
+    sections.forEach(s => {
+      const any = Array.from(s.querySelectorAll('.bm-row')).some(r => !r.classList.contains('hidden'));
+      s.classList.toggle('all-hidden', !any);
+    });
+    countEl.textContent = visible === rows.length ? '' : visible + ' of ' + rows.length + ' shown';
+  }
+  pills.forEach(p => { p.addEventListener('click', () => { pills.forEach(x => x.classList.remove('active')); p.classList.add('active'); activeFilter = p.dataset.filter; update(); }); });
+  searchEl.addEventListener('input', () => { activeSearch = searchEl.value.toLowerCase().trim(); update(); });
+}());
+</script>
 </body>
 </html>
