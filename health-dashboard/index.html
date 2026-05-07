@@ -9,17 +9,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #140e09;
-      --surface:  #1f1510;
-      --surface2: #2a1c12;
-      --border:   #6b4a30;
-      --text:     #f2e4d0;
-      --muted:    #a08060;
-      --accent:   #c8851a;
+      --bg:       #111216;
+      --surface:  #18191f;
+      --surface2: #1e2028;
+      --border:   #2d3040;
+      --text:     #e4e6f0;
+      --muted:    #7e8599;
+      --accent:   #a0aaff;
 
-      --opt-bg: #0d2010; --opt-text: #5ddb8a; --opt-border: #235e30;
-      --low-bg: #121a2e; --low-text: #93c5fd; --low-border: #1d3d7a;
-      --high-bg: #2a1508; --high-text: #fb923c; --high-border: #7a3010;
+      --opt-bg: #0d1f14; --opt-text: #4ade80; --opt-border: #1a4d2a;
+      --low-bg: #0e1726; --low-text: #93c5fd; --low-border: #1e3d6e;
+      --high-bg: #1f1209; --high-text: #fb923c; --high-border: #6b3010;
 
       --zach-color:   #60a5fa;
       --chase-color:  #e879f9;
@@ -30,9 +30,9 @@
 
     /* ── Header ── */
     header {
-      background: linear-gradient(135deg, #251a10 0%, #1a1008 100%);
-      border-bottom: 2px solid var(--border);
-      padding: 36px 40px 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 40px 24px;
     }
     .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
     .header-title h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.4px; }
@@ -66,7 +66,7 @@
     /* ── Nav ── */
     .nav-bar {
       position: sticky; top: 0; z-index: 100;
-      background: #1a1008ee;
+      background: #18191fee;
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
       padding: 10px 40px;
@@ -114,7 +114,7 @@
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
-    .bm-table tbody tr { border-bottom: 1px solid rgba(107,74,48,0.35); }
+    .bm-table tbody tr { border-bottom: 1px solid rgba(45,48,64,0.5); }
     .bm-table tbody tr:last-child { border-bottom: none; }
     .bm-table tbody tr:hover { background: rgba(255,255,255,0.015); }
 
@@ -194,6 +194,28 @@
 
     .test-date { font-size: 10px; color: var(--muted); font-weight: 400; }
 
+    /* ── Filter controls ── */
+    .controls {
+      padding: 10px 40px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 320px; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    #search { width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 12px 7px 32px; color: var(--text); font-size: 12px; outline: none; }
+    #search:focus { border-color: var(--accent); } #search::placeholder { color: var(--muted); }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 4px 13px; font-size: 11px; font-weight: 500; color: var(--muted);
+      cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+    .pill:hover { color: var(--text); border-color: var(--accent); }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: #0d0f18; }
+    #result-count { font-size: 11px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+    .bm-row.hidden { display: none; }
+    .cat-section.all-hidden { display: none; }
+
     /* ── Footer ── */
     footer {
       text-align: center;
@@ -259,6 +281,22 @@
   </div>
 </header>
 
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search biomarkers…" autocomplete="off">
+  </div>
+  <div class="pills">
+    <button class="pill active" data-filter="all">All</button>
+    <button class="pill" data-filter="flagged">Any Flagged</button>
+    <button class="pill" data-filter="zach-low">Zach Low</button>
+    <button class="pill" data-filter="zach-high">Zach High</button>
+    <button class="pill" data-filter="chase-low">Chase Low</button>
+    <button class="pill" data-filter="chase-high">Chase High</button>
+  </div>
+  <span id="result-count"></span>
+</div>
+
 <nav class="nav-bar">
 <a class="nav-pill" href="#cat-heart">♥ Heart</a>
 <a class="nav-pill" href="#cat-metabolic">⚡ Metabolic</a>
@@ -280,26 +318,7 @@
 </nav>
 
 <main>
-
-  <section class="cat-section" id="cat-heart">
-    <h2 class="cat-heading">♥ Heart</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Cholesterol, Total</td>
-      <td class="bm-range">≤ 200 mg/dL</td>
-      <td class="bm-bar">
+<section class="cat-section" id="cat-heart"><h2 class="cat-heading">♥ Heart</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="cholesterol, total heart"><td class="bm-name">Cholesterol, Total</td><td class="bm-range">≤ 200 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -308,15 +327,8 @@
       <div class="gauge-labels">
         <span>0</span><span>440</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">239 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">171 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">HDL Cholesterol</td>
-      <td class="bm-range">≥ 50 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">239 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">171 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="hdl cholesterol heart"><td class="bm-name">HDL Cholesterol</td><td class="bm-range">≥ 50 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -325,15 +337,8 @@
       <div class="gauge-labels">
         <span>0</span><span>110</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">63 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">47 mg/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Triglycerides</td>
-      <td class="bm-range">≤ 100 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">63 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">47 mg/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="triglycerides heart"><td class="bm-name">Triglycerides</td><td class="bm-range">≤ 100 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -342,15 +347,8 @@
       <div class="gauge-labels">
         <span>0</span><span>220</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">187 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">65 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL-Cholesterol</td>
-      <td class="bm-range">≤ 100 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">187 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">65 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="ldl-cholesterol heart"><td class="bm-name">LDL-Cholesterol</td><td class="bm-range">≤ 100 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -359,15 +357,8 @@
       <div class="gauge-labels">
         <span>0</span><span>220</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">144 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">109 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Chol/HDLC Ratio</td>
-      <td class="bm-range">≤ 4.0 ratio</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">144 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">109 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="chol/hdlc ratio heart"><td class="bm-name">Chol/HDLC Ratio</td><td class="bm-range">≤ 4.0 ratio</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -376,15 +367,8 @@
       <div class="gauge-labels">
         <span>0</span><span>8.8</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">3.8 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">3.6 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Non-HDL Cholesterol</td>
-      <td class="bm-range">≤ 130 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">3.8 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">3.6 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="non-hdl cholesterol heart"><td class="bm-name">Non-HDL Cholesterol</td><td class="bm-range">≤ 130 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -393,15 +377,8 @@
       <div class="gauge-labels">
         <span>0</span><span>286</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">176 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">124 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Lipoprotein (a)</td>
-      <td class="bm-range">≤ 75 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">176 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">124 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="lipoprotein (a) heart"><td class="bm-name">Lipoprotein (a)</td><td class="bm-range">≤ 75 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -410,15 +387,8 @@
       <div class="gauge-labels">
         <span>0</span><span>165</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">26 nmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">49 nmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">hs-CRP</td>
-      <td class="bm-range">≤ 0.5 mg/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">26 nmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">49 nmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="hs-crp heart"><td class="bm-name">hs-CRP</td><td class="bm-range">≤ 0.5 mg/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -427,15 +397,8 @@
       <div class="gauge-labels">
         <span>0</span><span>1.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><0.2 mg/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><0.2 mg/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Apolipoprotein B</td>
-      <td class="bm-range">≤ 80 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><0.2 mg/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><0.2 mg/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="apolipoprotein b heart"><td class="bm-name">Apolipoprotein B</td><td class="bm-range">≤ 80 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -444,15 +407,8 @@
       <div class="gauge-labels">
         <span>0</span><span>176</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">123 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">99 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Homocysteine</td>
-      <td class="bm-range">≤ 8.0 umol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">123 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">99 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="homocysteine heart"><td class="bm-name">Homocysteine</td><td class="bm-range">≤ 8.0 umol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -461,15 +417,8 @@
       <div class="gauge-labels">
         <span>0</span><span>17.6</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">4.6 umol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">8.7 umol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL Particle Number</td>
-      <td class="bm-range">≤ 1000 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">4.6 umol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">8.7 umol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="ldl particle number heart"><td class="bm-name">LDL Particle Number</td><td class="bm-range">≤ 1000 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:40.4%"></div>
@@ -478,15 +427,8 @@
       <div class="gauge-labels">
         <span>0</span><span>2.48e+03</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">2253 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">1604 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL Small</td>
-      <td class="bm-range">≤ 200 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">2253 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">1604 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="ldl small heart"><td class="bm-name">LDL Small</td><td class="bm-range">≤ 200 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:34.7%"></div>
@@ -495,15 +437,8 @@
       <div class="gauge-labels">
         <span>0</span><span>576</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">524 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">289 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL Medium</td>
-      <td class="bm-range">≤ 215 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">524 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">289 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="ldl medium heart"><td class="bm-name">LDL Medium</td><td class="bm-range">≤ 215 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -512,15 +447,8 @@
       <div class="gauge-labels">
         <span>0</span><span>473</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">379 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">395 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">HDL Large</td>
-      <td class="bm-range">≥ 6729 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">379 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">395 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="hdl large heart"><td class="bm-name">HDL Large</td><td class="bm-range">≥ 6729 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -529,23 +457,9 @@
       <div class="gauge-labels">
         <span>0</span><span>1.48e+04</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">6047 nmol/L</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">5388 nmol/L</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL Pattern</td>
-      <td class="bm-range">—</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-high"><div class="pval">Pattern B</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">Pattern A</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LDL Peak Size</td>
-      <td class="bm-range">≥ 222.9 Å</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">6047 nmol/L</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">5388 nmol/L</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="ldl pattern heart"><td class="bm-name">LDL Pattern</td><td class="bm-range">—</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-high"><div class="pval">Pattern B</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">Pattern A</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="ldl peak size heart"><td class="bm-name">LDL Peak Size</td><td class="bm-range">≥ 222.9 Å</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -554,34 +468,8 @@
       <div class="gauge-labels">
         <span>0</span><span>490</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">209.7 Å</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">221.8 Å</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-metabolic">
-    <h2 class="cat-heading">⚡ Metabolic</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Glucose</td>
-      <td class="bm-range">72 – 90 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">209.7 Å</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">221.8 Å</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-metabolic"><h2 class="cat-heading">⚡ Metabolic</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="glucose metabolic"><td class="bm-name">Glucose</td><td class="bm-range">72 – 90 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:34.8%;width:21.7%"></div>
@@ -590,15 +478,8 @@
       <div class="gauge-labels">
         <span>43.2</span><span>126</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">88 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">82 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Hemoglobin A1c</td>
-      <td class="bm-range">4.6 – 5.4 %</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">88 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">82 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="hemoglobin a1c metabolic"><td class="bm-name">Hemoglobin A1c</td><td class="bm-range">4.6 – 5.4 %</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:38.3%;width:16.7%"></div>
@@ -607,15 +488,8 @@
       <div class="gauge-labels">
         <span>2.76</span><span>7.56</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">5.1 %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.7 %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Insulin</td>
-      <td class="bm-range">3 – 8 uIU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">5.1 %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.7 %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="insulin metabolic"><td class="bm-name">Insulin</td><td class="bm-range">3 – 8 uIU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:12.8%;width:53.2%"></div>
@@ -624,15 +498,8 @@
       <div class="gauge-labels">
         <span>1.8</span><span>11.2</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">3.8 uIU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">3.1 uIU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Uric Acid</td>
-      <td class="bm-range">3.5 – 5.5 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">3.8 uIU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">3.1 uIU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="uric acid metabolic"><td class="bm-name">Uric Acid</td><td class="bm-range">3.5 – 5.5 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:25.0%;width:35.7%"></div>
@@ -641,15 +508,8 @@
       <div class="gauge-labels">
         <span>2.1</span><span>7.7</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">4.8 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">6.3 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Leptin</td>
-      <td class="bm-range">1.0 – 9.0 ng/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">4.8 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">6.3 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="leptin metabolic"><td class="bm-name">Leptin</td><td class="bm-range">1.0 – 9.0 ng/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:5.9%;width:64.9%"></div>
@@ -658,34 +518,8 @@
       <div class="gauge-labels">
         <span>0.27</span><span>12.6</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">0.3 ng/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">0.4 ng/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-liver">
-    <h2 class="cat-heading">◈ Liver</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">ALT</td>
-      <td class="bm-range">10 – 25 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">0.3 ng/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">0.4 ng/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-liver"><h2 class="cat-heading">◈ Liver</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="alt liver"><td class="bm-name">ALT</td><td class="bm-range">10 – 25 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:8.0%;width:29.9%"></div>
@@ -694,15 +528,8 @@
       <div class="gauge-labels">
         <span>6</span><span>56.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">23 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">51 U/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">AST</td>
-      <td class="bm-range">10 – 25 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">23 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">51 U/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="ast liver"><td class="bm-name">AST</td><td class="bm-range">10 – 25 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:8.0%;width:29.9%"></div>
@@ -711,15 +538,8 @@
       <div class="gauge-labels">
         <span>6</span><span>56.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">23 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">51 U/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Alkaline Phosphatase</td>
-      <td class="bm-range">40 – 100 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">23 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">51 U/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="alkaline phosphatase liver"><td class="bm-name">Alkaline Phosphatase</td><td class="bm-range">40 – 100 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:13.8%;width:51.7%"></div>
@@ -728,15 +548,8 @@
       <div class="gauge-labels">
         <span>24</span><span>140</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">124 U/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">99 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">GGT</td>
-      <td class="bm-range">≤ 25 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">124 U/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">99 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="ggt liver"><td class="bm-name">GGT</td><td class="bm-range">≤ 25 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -745,15 +558,8 @@
       <div class="gauge-labels">
         <span>0</span><span>55</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">18 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">20 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Bilirubin, Total</td>
-      <td class="bm-range">0.3 – 1.0 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">18 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">20 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="bilirubin, total liver"><td class="bm-name">Bilirubin, Total</td><td class="bm-range">0.3 – 1.0 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:9.8%;width:57.4%"></div>
@@ -762,15 +568,8 @@
       <div class="gauge-labels">
         <span>0.18</span><span>1.4</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">0.6 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">0.8 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Albumin</td>
-      <td class="bm-range">4.3 – 5.0 g/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">0.6 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">0.8 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="albumin liver"><td class="bm-name">Albumin</td><td class="bm-range">4.3 – 5.0 g/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:38.9%;width:15.8%"></div>
@@ -779,15 +578,8 @@
       <div class="gauge-labels">
         <span>2.58</span><span>7</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">4.9 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.6 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Globulin</td>
-      <td class="bm-range">2.2 – 3.2 g/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">4.9 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.6 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="globulin liver"><td class="bm-name">Globulin</td><td class="bm-range">2.2 – 3.2 g/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:27.8%;width:31.6%"></div>
@@ -796,15 +588,8 @@
       <div class="gauge-labels">
         <span>1.32</span><span>4.48</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">2.7 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">2.1 g/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Albumin/Globulin Ratio</td>
-      <td class="bm-range">1.3 – 2.2 ratio</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">2.7 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">2.1 g/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="albumin/globulin ratio liver"><td class="bm-name">Albumin/Globulin Ratio</td><td class="bm-range">1.3 – 2.2 ratio</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:22.6%;width:39.1%"></div>
@@ -813,15 +598,8 @@
       <div class="gauge-labels">
         <span>0.78</span><span>3.08</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">1.8 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">2.2 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Protein, Total</td>
-      <td class="bm-range">6.9 – 7.9 g/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">1.8 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">2.2 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="protein, total liver"><td class="bm-name">Protein, Total</td><td class="bm-range">6.9 – 7.9 g/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:39.9%;width:14.5%"></div>
@@ -830,34 +608,8 @@
       <div class="gauge-labels">
         <span>4.14</span><span>11.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">7.6 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">6.7 g/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-kidney">
-    <h2 class="cat-heading">◎ Kidney</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">BUN (Urea Nitrogen)</td>
-      <td class="bm-range">10 – 18 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">7.6 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">6.7 g/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-kidney"><h2 class="cat-heading">◎ Kidney</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="bun (urea nitrogen) kidney"><td class="bm-name">BUN (Urea Nitrogen)</td><td class="bm-range">10 – 18 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:20.8%;width:41.7%"></div>
@@ -866,15 +618,8 @@
       <div class="gauge-labels">
         <span>6</span><span>25.2</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">16 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">22 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Creatinine</td>
-      <td class="bm-range">0.7 – 1.1 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">16 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">22 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="creatinine kidney"><td class="bm-name">Creatinine</td><td class="bm-range">0.7 – 1.1 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:25.0%;width:35.7%"></div>
@@ -883,15 +628,8 @@
       <div class="gauge-labels">
         <span>0.42</span><span>1.54</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">1.17 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">1.27 mg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">eGFR</td>
-      <td class="bm-range">≥ 90 mL/min</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">1.17 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">1.27 mg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="egfr kidney"><td class="bm-name">eGFR</td><td class="bm-range">≥ 90 mL/min</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -900,42 +638,9 @@
       <div class="gauge-labels">
         <span>0</span><span>198</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">79 mL/min</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">76 mL/min</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Albumin, Urine</td>
-      <td class="bm-range">— mg/dL</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-opt"><div class="pval"><0.2 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">0.2 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-blood">
-    <h2 class="cat-heading">○ Blood</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">RBC</td>
-      <td class="bm-range">4.5 – 5.5 M/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">79 mL/min</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">76 mL/min</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="albumin, urine kidney"><td class="bm-name">Albumin, Urine</td><td class="bm-range">— mg/dL</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-opt"><div class="pval"><0.2 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">0.2 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-blood"><h2 class="cat-heading">○ Blood</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="rbc blood"><td class="bm-name">RBC</td><td class="bm-range">4.5 – 5.5 M/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:36.0%;width:20.0%"></div>
@@ -944,15 +649,8 @@
       <div class="gauge-labels">
         <span>2.7</span><span>7.7</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">5.61 M/uL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.53 M/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Hemoglobin</td>
-      <td class="bm-range">14.0 – 17.0 g/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">5.61 M/uL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">4.53 M/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="hemoglobin blood"><td class="bm-name">Hemoglobin</td><td class="bm-range">14.0 – 17.0 g/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:36.4%;width:19.5%"></div>
@@ -961,15 +659,8 @@
       <div class="gauge-labels">
         <span>8.4</span><span>23.8</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">17.4 g/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">14.0 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Hematocrit</td>
-      <td class="bm-range">40.0 – 50.0 %</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">17.4 g/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">14.0 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="hematocrit blood"><td class="bm-name">Hematocrit</td><td class="bm-range">40.0 – 50.0 %</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:34.8%;width:21.7%"></div>
@@ -978,15 +669,8 @@
       <div class="gauge-labels">
         <span>24</span><span>70</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">50.7 %</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">40.5 %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">MCV</td>
-      <td class="bm-range">85 – 95 fL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">50.7 %</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">40.5 %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="mcv blood"><td class="bm-name">MCV</td><td class="bm-range">85 – 95 fL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:41.5%;width:12.2%"></div>
@@ -995,15 +679,8 @@
       <div class="gauge-labels">
         <span>51</span><span>133</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">90.4 fL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">89.4 fL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">MCH</td>
-      <td class="bm-range">28 – 32 pg</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">90.4 fL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">89.4 fL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="mch blood"><td class="bm-name">MCH</td><td class="bm-range">28 – 32 pg</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:40.0%;width:14.3%"></div>
@@ -1012,15 +689,8 @@
       <div class="gauge-labels">
         <span>16.8</span><span>44.8</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">31.0 pg</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">30.9 pg</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">MCHC</td>
-      <td class="bm-range">32 – 35 g/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">31.0 pg</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">30.9 pg</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="mchc blood"><td class="bm-name">MCHC</td><td class="bm-range">32 – 35 g/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:43.0%;width:10.1%"></div>
@@ -1029,15 +699,8 @@
       <div class="gauge-labels">
         <span>19.2</span><span>49</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">34.3 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">34.6 g/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">RDW</td>
-      <td class="bm-range">≤ 13.0 %</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">34.3 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">34.6 g/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="rdw blood"><td class="bm-name">RDW</td><td class="bm-range">≤ 13.0 %</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -1046,15 +709,8 @@
       <div class="gauge-labels">
         <span>0</span><span>28.6</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">13.5 %</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">13.3 %</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Platelet Count</td>
-      <td class="bm-range">150 – 350 K/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">13.5 %</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">13.3 %</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="platelet count blood"><td class="bm-name">Platelet Count</td><td class="bm-range">150 – 350 K/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.0%;width:50.0%"></div>
@@ -1063,15 +719,8 @@
       <div class="gauge-labels">
         <span>90</span><span>490</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">235 K/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">188 K/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">MPV</td>
-      <td class="bm-range">8.5 – 11.5 fL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">235 K/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">188 K/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="mpv blood"><td class="bm-name">MPV</td><td class="bm-range">8.5 – 11.5 fL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:30.9%;width:27.3%"></div>
@@ -1080,50 +729,10 @@
       <div class="gauge-labels">
         <span>5.1</span><span>16.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">10.5 fL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">9.5 fL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">ABO Blood Group</td>
-      <td class="bm-range">—</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-opt"><div class="pval">Type A</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">Type A</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Rh Type</td>
-      <td class="bm-range">—</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-opt"><div class="pval">Positive</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">Positive</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-immune-regulation">
-    <h2 class="cat-heading">◉ Immune Regulation</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">WBC</td>
-      <td class="bm-range">4.0 – 7.0 K/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">10.5 fL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">9.5 fL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="abo blood group blood"><td class="bm-name">ABO Blood Group</td><td class="bm-range">—</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-opt"><div class="pval">Type A</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">Type A</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="rh type blood"><td class="bm-name">Rh Type</td><td class="bm-range">—</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-opt"><div class="pval">Positive</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">Positive</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-immune-regulation"><h2 class="cat-heading">◉ Immune Regulation</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="wbc immune regulation"><td class="bm-name">WBC</td><td class="bm-range">4.0 – 7.0 K/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:21.6%;width:40.5%"></div>
@@ -1132,15 +741,8 @@
       <div class="gauge-labels">
         <span>2.4</span><span>9.8</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">5.5 K/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">2.8 K/uL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Absolute Neutrophils</td>
-      <td class="bm-range">2000 – 6000 cells/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">5.5 K/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">2.8 K/uL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="absolute neutrophils immune regulation"><td class="bm-name">Absolute Neutrophils</td><td class="bm-range">2000 – 6000 cells/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.0%;width:53.1%"></div>
@@ -1149,15 +751,8 @@
       <div class="gauge-labels">
         <span>867</span><span>8.4e+03</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">3333 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">963 cells/uL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Absolute Lymphocytes</td>
-      <td class="bm-range">1500 – 3500 cells/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">3333 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">963 cells/uL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="absolute lymphocytes immune regulation"><td class="bm-name">Absolute Lymphocytes</td><td class="bm-range">1500 – 3500 cells/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.0%;width:50.0%"></div>
@@ -1166,15 +761,8 @@
       <div class="gauge-labels">
         <span>900</span><span>4.9e+03</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">1133 cells/uL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">1361 cells/uL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Absolute Monocytes</td>
-      <td class="bm-range">200 – 600 cells/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">1133 cells/uL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">1361 cells/uL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="absolute monocytes immune regulation"><td class="bm-name">Absolute Monocytes</td><td class="bm-range">200 – 600 cells/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:11.1%;width:55.6%"></div>
@@ -1183,15 +771,8 @@
       <div class="gauge-labels">
         <span>120</span><span>840</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">402 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">364 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Absolute Eosinophils</td>
-      <td class="bm-range">15 – 250 cells/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">402 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">364 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="absolute eosinophils immune regulation"><td class="bm-name">Absolute Eosinophils</td><td class="bm-range">15 – 250 cells/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:2.0%;width:36.1%"></div>
@@ -1200,15 +781,8 @@
       <div class="gauge-labels">
         <span>9</span><span>641</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">583 cells/uL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">101 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Absolute Basophils</td>
-      <td class="bm-range">0 – 100 cells/uL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">583 cells/uL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">101 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="absolute basophils immune regulation"><td class="bm-name">Absolute Basophils</td><td class="bm-range">0 – 100 cells/uL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:2.0%;width:69.4%"></div>
@@ -1217,34 +791,8 @@
       <div class="gauge-labels">
         <span>0</span><span>140</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">50 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">11 cells/uL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-thyroid">
-    <h2 class="cat-heading">◇ Thyroid</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">TSH</td>
-      <td class="bm-range">1.0 – 2.5 mIU/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">50 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">11 cells/uL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-thyroid"><h2 class="cat-heading">◇ Thyroid</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="tsh thyroid"><td class="bm-name">TSH</td><td class="bm-range">1.0 – 2.5 mIU/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:13.8%;width:51.7%"></div>
@@ -1253,15 +801,8 @@
       <div class="gauge-labels">
         <span>0.6</span><span>3.5</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">1.73 mIU/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">1.66 mIU/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">T4, Free</td>
-      <td class="bm-range">1.0 – 1.7 ng/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">1.73 mIU/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">1.66 mIU/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="t4, free thyroid"><td class="bm-name">T4, Free</td><td class="bm-range">1.0 – 1.7 ng/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:22.5%;width:39.3%"></div>
@@ -1270,15 +811,8 @@
       <div class="gauge-labels">
         <span>0.6</span><span>2.38</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">1.4 ng/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">1.2 ng/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">T3, Free</td>
-      <td class="bm-range">3.0 – 4.0 pg/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">1.4 ng/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">1.2 ng/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="t3, free thyroid"><td class="bm-name">T3, Free</td><td class="bm-range">3.0 – 4.0 pg/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:31.6%;width:26.3%"></div>
@@ -1287,15 +821,8 @@
       <div class="gauge-labels">
         <span>1.8</span><span>5.6</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">3.5 pg/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">3.0 pg/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Thyroglobulin Antibodies</td>
-      <td class="bm-range">≤ 2 IU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">3.5 pg/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">3.0 pg/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="thyroglobulin antibodies thyroid"><td class="bm-name">Thyroglobulin Antibodies</td><td class="bm-range">≤ 2 IU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -1304,15 +831,8 @@
       <div class="gauge-labels">
         <span>0</span><span>4.4</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><2 IU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><2 IU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Thyroid Peroxidase Antibodies</td>
-      <td class="bm-range">≤ 2 IU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><2 IU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><2 IU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="thyroid peroxidase antibodies thyroid"><td class="bm-name">Thyroid Peroxidase Antibodies</td><td class="bm-range">≤ 2 IU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:36.4%"></div>
@@ -1321,34 +841,8 @@
       <div class="gauge-labels">
         <span>0</span><span>5.5</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><1 IU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">5 IU/mL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-hormones">
-    <h2 class="cat-heading">◆ Hormones</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">SHBG</td>
-      <td class="bm-range">20 – 45 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><1 IU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">5 IU/mL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-hormones"><h2 class="cat-heading">◆ Hormones</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="shbg hormones"><td class="bm-name">SHBG</td><td class="bm-range">20 – 45 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.7%;width:49.0%"></div>
@@ -1357,15 +851,8 @@
       <div class="gauge-labels">
         <span>12</span><span>63</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">45 nmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">54 nmol/L</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Testosterone, Free</td>
-      <td class="bm-range">70 – 130 pg/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">45 nmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">54 nmol/L</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="testosterone, free hormones"><td class="bm-name">Testosterone, Free</td><td class="bm-range">70 – 130 pg/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:20.0%;width:42.9%"></div>
@@ -1374,15 +861,8 @@
       <div class="gauge-labels">
         <span>42</span><span>182</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">134.7 pg/mL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">90.2 pg/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Testosterone, Total</td>
-      <td class="bm-range">600 – 900 ng/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">134.7 pg/mL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">90.2 pg/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="testosterone, total hormones"><td class="bm-name">Testosterone, Total</td><td class="bm-range">600 – 900 ng/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:26.7%;width:33.3%"></div>
@@ -1391,15 +871,8 @@
       <div class="gauge-labels">
         <span>360</span><span>1.26e+03</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">815 ng/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">652 ng/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Prolactin</td>
-      <td class="bm-range">2 – 10 ng/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">815 ng/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">652 ng/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="prolactin hormones"><td class="bm-name">Prolactin</td><td class="bm-range">2 – 10 ng/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:6.2%;width:62.5%"></div>
@@ -1408,15 +881,8 @@
       <div class="gauge-labels">
         <span>1.2</span><span>14</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">4.7 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.4 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">DHEA Sulfate</td>
-      <td class="bm-range">150 – 350 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">4.7 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.4 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="dhea sulfate hormones"><td class="bm-name">DHEA Sulfate</td><td class="bm-range">150 – 350 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.0%;width:50.0%"></div>
@@ -1425,15 +891,8 @@
       <div class="gauge-labels">
         <span>90</span><span>490</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">130 mcg/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">117 mcg/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Estradiol</td>
-      <td class="bm-range">15 – 35 pg/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">130 mcg/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">117 mcg/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="estradiol hormones"><td class="bm-name">Estradiol</td><td class="bm-range">15 – 35 pg/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.0%;width:50.0%"></div>
@@ -1442,15 +901,8 @@
       <div class="gauge-labels">
         <span>9</span><span>49</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><30 pg/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><30 pg/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">LH</td>
-      <td class="bm-range">1.5 – 9.3 mIU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><30 pg/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><30 pg/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="lh hormones"><td class="bm-name">LH</td><td class="bm-range">1.5 – 9.3 mIU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:10.3%;width:60.7%"></div>
@@ -1459,15 +911,8 @@
       <div class="gauge-labels">
         <span>0.18</span><span>13</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval"><0.2 (TRT) mIU/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">2.2 mIU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">FSH</td>
-      <td class="bm-range">1.4 – 12.8 mIU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval"><0.2 (TRT) mIU/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">2.2 mIU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="fsh hormones"><td class="bm-name">FSH</td><td class="bm-range">1.4 – 12.8 mIU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:4.5%;width:65.9%"></div>
@@ -1476,34 +921,8 @@
       <div class="gauge-labels">
         <span>0.63</span><span>17.9</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval"><0.7 (TRT) mIU/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">5.7 mIU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-stress-and-aging">
-    <h2 class="cat-heading">◑ Stress & Aging</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Cortisol, Total</td>
-      <td class="bm-range">10 – 18 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval"><0.7 (TRT) mIU/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">5.7 mIU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-stress-and-aging"><h2 class="cat-heading">◑ Stress & Aging</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="cortisol, total stress & aging"><td class="bm-name">Cortisol, Total</td><td class="bm-range">10 – 18 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:20.8%;width:41.7%"></div>
@@ -1512,34 +931,8 @@
       <div class="gauge-labels">
         <span>6</span><span>25.2</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">12.8 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">8.2 mcg/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-male-health">
-    <h2 class="cat-heading">▲ Male Health</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">PSA, Total</td>
-      <td class="bm-range">≤ 1.5 ng/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">12.8 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">8.2 mcg/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-male-health"><h2 class="cat-heading">▲ Male Health</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="psa, total male health"><td class="bm-name">PSA, Total</td><td class="bm-range">≤ 1.5 ng/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -1548,23 +941,9 @@
       <div class="gauge-labels">
         <span>0</span><span>3.3</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">0.5 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">0.6 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">PSA, Free</td>
-      <td class="bm-range">— ng/mL</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-opt"><div class="pval">0.2 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">0.2 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">PSA, % Free</td>
-      <td class="bm-range">≥ 25 %</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">0.5 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">0.6 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="psa, free male health"><td class="bm-name">PSA, Free</td><td class="bm-range">— ng/mL</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-opt"><div class="pval">0.2 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">0.2 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="psa, % free male health"><td class="bm-name">PSA, % Free</td><td class="bm-range">≥ 25 %</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -1573,34 +952,8 @@
       <div class="gauge-labels">
         <span>0</span><span>55</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">40% %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">33% %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-nutrients">
-    <h2 class="cat-heading">◐ Nutrients</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Iron, Total</td>
-      <td class="bm-range">70 – 160 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">40% %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">33% %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-nutrients"><h2 class="cat-heading">◐ Nutrients</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="iron, total nutrients"><td class="bm-name">Iron, Total</td><td class="bm-range">70 – 160 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.4%;width:49.5%"></div>
@@ -1609,15 +962,8 @@
       <div class="gauge-labels">
         <span>42</span><span>224</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">134 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">102 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Iron Binding Capacity</td>
-      <td class="bm-range">250 – 370 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">134 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">102 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="iron binding capacity nutrients"><td class="bm-name">Iron Binding Capacity</td><td class="bm-range">250 – 370 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:27.2%;width:32.6%"></div>
@@ -1626,15 +972,8 @@
       <div class="gauge-labels">
         <span>150</span><span>518</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">407 mcg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">359 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Iron % Saturation</td>
-      <td class="bm-range">20 – 40 %</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">407 mcg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">359 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="iron % saturation nutrients"><td class="bm-name">Iron % Saturation</td><td class="bm-range">20 – 40 %</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:18.2%;width:45.5%"></div>
@@ -1643,15 +982,8 @@
       <div class="gauge-labels">
         <span>12</span><span>56</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">33 %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">28 %</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Ferritin</td>
-      <td class="bm-range">50 – 200 ng/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">33 %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">28 %</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="low" data-zflag="1" data-cflag="1" data-search="ferritin nutrients"><td class="bm-name">Ferritin</td><td class="bm-range">50 – 200 ng/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:8.0%;width:60.0%"></div>
@@ -1660,15 +992,8 @@
       <div class="gauge-labels">
         <span>30</span><span>280</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">32 ng/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-low"><div class="pval">37 ng/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Zinc</td>
-      <td class="bm-range">80 – 110 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">32 ng/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-low"><div class="pval">37 ng/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="zinc nutrients"><td class="bm-name">Zinc</td><td class="bm-range">80 – 110 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:30.2%;width:28.3%"></div>
@@ -1677,15 +1002,8 @@
       <div class="gauge-labels">
         <span>48</span><span>154</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">128 mcg/dL</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">86 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Vitamin D (25-OH)</td>
-      <td class="bm-range">40 – 80 ng/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">128 mcg/dL</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">86 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="low" data-zflag="0" data-cflag="1" data-search="vitamin d (25-oh) nutrients"><td class="bm-name">Vitamin D (25-OH)</td><td class="bm-range">40 – 80 ng/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:18.2%;width:45.5%"></div>
@@ -1694,15 +1012,8 @@
       <div class="gauge-labels">
         <span>24</span><span>112</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">64 ng/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-low"><div class="pval">36 ng/mL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Methylmalonic Acid</td>
-      <td class="bm-range">55 – 200 nmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">64 ng/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-low"><div class="pval">36 ng/mL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="methylmalonic acid nutrients"><td class="bm-name">Methylmalonic Acid</td><td class="bm-range">55 – 200 nmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:8.9%;width:58.7%"></div>
@@ -1711,15 +1022,8 @@
       <div class="gauge-labels">
         <span>33</span><span>280</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">136 nmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">124 nmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">OmegaCheck (EPA+DPA+DHA)</td>
-      <td class="bm-range">≥ 5.5 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">136 nmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">124 nmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="omegacheck (epa+dpa+dha) nutrients"><td class="bm-name">OmegaCheck (EPA+DPA+DHA)</td><td class="bm-range">≥ 5.5 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -1728,15 +1032,8 @@
       <div class="gauge-labels">
         <span>0</span><span>12.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">5.4 % by wt</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">7.2 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">EPA</td>
-      <td class="bm-range">0.5 – 2.3 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">5.4 % by wt</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">7.2 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="epa nutrients"><td class="bm-name">EPA</td><td class="bm-range">0.5 – 2.3 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:6.8%;width:61.6%"></div>
@@ -1745,15 +1042,8 @@
       <div class="gauge-labels">
         <span>0.3</span><span>3.22</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">0.8 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">1.3 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">DPA</td>
-      <td class="bm-range">0.8 – 1.8 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">0.8 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">1.3 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="dpa nutrients"><td class="bm-name">DPA</td><td class="bm-range">0.8 – 1.8 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:15.7%;width:49.0%"></div>
@@ -1762,15 +1052,8 @@
       <div class="gauge-labels">
         <span>0.48</span><span>2.52</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">1.6 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">1.9 % by wt</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">DHA</td>
-      <td class="bm-range">2.0 – 5.1 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">1.6 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">1.9 % by wt</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="dha nutrients"><td class="bm-name">DHA</td><td class="bm-range">2.0 – 5.1 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:13.5%;width:52.2%"></div>
@@ -1779,15 +1062,8 @@
       <div class="gauge-labels">
         <span>1.2</span><span>7.14</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">3.0 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.0 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Omega-3 Total</td>
-      <td class="bm-range">≥ 5.5 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">3.0 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.0 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="omega-3 total nutrients"><td class="bm-name">Omega-3 Total</td><td class="bm-range">≥ 5.5 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.5%;width:54.5%"></div>
@@ -1796,15 +1072,8 @@
       <div class="gauge-labels">
         <span>0</span><span>12.1</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">5.4 % by wt</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">7.2 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Omega-6 Total</td>
-      <td class="bm-range">20 – 30 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">5.4 % by wt</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">7.2 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="high" data-zflag="1" data-cflag="1" data-search="omega-6 total nutrients"><td class="bm-name">Omega-6 Total</td><td class="bm-range">20 – 30 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:26.7%;width:33.3%"></div>
@@ -1813,15 +1082,8 @@
       <div class="gauge-labels">
         <span>12</span><span>42</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">32.6 % by wt</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-high"><div class="pval">33.8 % by wt</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Arachidonic Acid</td>
-      <td class="bm-range">8.6 – 12.0 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-high"><div class="pval">32.6 % by wt</div><span class="badge badge-high">High</span></td><td class="person-cell lc-high"><div class="pval">33.8 % by wt</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="arachidonic acid nutrients"><td class="bm-name">Arachidonic Acid</td><td class="bm-range">8.6 – 12.0 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:29.6%;width:29.2%"></div>
@@ -1830,15 +1092,8 @@
       <div class="gauge-labels">
         <span>5.16</span><span>16.8</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">8.8 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">10.4 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Linoleic Acid</td>
-      <td class="bm-range">20.0 – 28.0 % by wt</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">8.8 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">10.4 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="linoleic acid nutrients"><td class="bm-name">Linoleic Acid</td><td class="bm-range">20.0 – 28.0 % by wt</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:29.4%;width:29.4%"></div>
@@ -1847,15 +1102,8 @@
       <div class="gauge-labels">
         <span>12</span><span>39.2</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">18.9 % by wt</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">20.1 % by wt</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Arachidonic Acid/EPA Ratio</td>
-      <td class="bm-range">≤ 20.0 ratio</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">18.9 % by wt</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">20.1 % by wt</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="arachidonic acid/epa ratio nutrients"><td class="bm-name">Arachidonic Acid/EPA Ratio</td><td class="bm-range">≤ 20.0 ratio</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -1864,15 +1112,8 @@
       <div class="gauge-labels">
         <span>0</span><span>44</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">10.5 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">7.9 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Omega-6/Omega-3 Ratio</td>
-      <td class="bm-range">≤ 6.0 ratio</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">10.5 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">7.9 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="omega-6/omega-3 ratio nutrients"><td class="bm-name">Omega-6/Omega-3 Ratio</td><td class="bm-range">≤ 6.0 ratio</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -1881,34 +1122,8 @@
       <div class="gauge-labels">
         <span>0</span><span>13.2</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">6.0 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.7 ratio</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-electrolytes">
-    <h2 class="cat-heading">◊ Electrolytes</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Sodium</td>
-      <td class="bm-range">136 – 144 mmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">6.0 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.7 ratio</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-electrolytes"><h2 class="cat-heading">◊ Electrolytes</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="sodium electrolytes"><td class="bm-name">Sodium</td><td class="bm-range">136 – 144 mmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:45.3%;width:6.7%"></div>
@@ -1917,15 +1132,8 @@
       <div class="gauge-labels">
         <span>81.6</span><span>202</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">138 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">137 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Potassium</td>
-      <td class="bm-range">3.9 – 4.8 mmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">138 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">137 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="potassium electrolytes"><td class="bm-name">Potassium</td><td class="bm-range">3.9 – 4.8 mmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:35.6%;width:20.5%"></div>
@@ -1934,15 +1142,8 @@
       <div class="gauge-labels">
         <span>2.34</span><span>6.72</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">4.2 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">4.0 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Chloride</td>
-      <td class="bm-range">100 – 108 mmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">4.2 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">4.0 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="chloride electrolytes"><td class="bm-name">Chloride</td><td class="bm-range">100 – 108 mmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:43.9%;width:8.8%"></div>
@@ -1951,15 +1152,8 @@
       <div class="gauge-labels">
         <span>60</span><span>151</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">97 mmol/L</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">102 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Carbon Dioxide</td>
-      <td class="bm-range">25 – 30 mmol/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">97 mmol/L</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">102 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="carbon dioxide electrolytes"><td class="bm-name">Carbon Dioxide</td><td class="bm-range">25 – 30 mmol/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:37.0%;width:18.5%"></div>
@@ -1968,15 +1162,8 @@
       <div class="gauge-labels">
         <span>15</span><span>42</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">29 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">26 mmol/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Calcium</td>
-      <td class="bm-range">9.2 – 10.0 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">29 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">26 mmol/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="calcium electrolytes"><td class="bm-name">Calcium</td><td class="bm-range">9.2 – 10.0 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:43.4%;width:9.4%"></div>
@@ -1985,15 +1172,8 @@
       <div class="gauge-labels">
         <span>5.52</span><span>14</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">9.9 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">9.5 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Magnesium, RBC</td>
-      <td class="bm-range">5.2 – 6.4 mg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">9.9 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">9.5 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="magnesium, rbc electrolytes"><td class="bm-name">Magnesium, RBC</td><td class="bm-range">5.2 – 6.4 mg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:35.6%;width:20.5%"></div>
@@ -2002,42 +1182,9 @@
       <div class="gauge-labels">
         <span>3.12</span><span>8.96</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">4.6 mg/dL</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">5.4 mg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-autoimmunity">
-    <h2 class="cat-heading">★ Autoimmunity</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">ANA Screen, IFA</td>
-      <td class="bm-range">—</td>
-      <td class="bm-bar"><div class="no-bar">—</div></td>
-      <td class="person-cell lc-opt"><div class="pval">Negative</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-high"><div class="pval">Positive 1:80</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Rheumatoid Factor</td>
-      <td class="bm-range">≤ 10 IU/mL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">4.6 mg/dL</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">5.4 mg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-autoimmunity"><h2 class="cat-heading">★ Autoimmunity</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="high" data-zflag="0" data-cflag="1" data-search="ana screen, ifa autoimmunity"><td class="bm-name">ANA Screen, IFA</td><td class="bm-range">—</td><td class="bm-bar"><div class="no-bar">—</div></td><td class="person-cell lc-opt"><div class="pval">Negative</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-high"><div class="pval">Positive 1:80</div><span class="badge badge-high">High</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="rheumatoid factor autoimmunity"><td class="bm-name">Rheumatoid Factor</td><td class="bm-range">≤ 10 IU/mL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -2046,34 +1193,8 @@
       <div class="gauge-labels">
         <span>0</span><span>22</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><10 IU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><10 IU/mL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-pancreas">
-    <h2 class="cat-heading">◈ Pancreas</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Amylase</td>
-      <td class="bm-range">30 – 80 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><10 IU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><10 IU/mL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-pancreas"><h2 class="cat-heading">◈ Pancreas</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="amylase pancreas"><td class="bm-name">Amylase</td><td class="bm-range">30 – 80 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:12.8%;width:53.2%"></div>
@@ -2082,15 +1203,8 @@
       <div class="gauge-labels">
         <span>18</span><span>112</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">64 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">34 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Lipase</td>
-      <td class="bm-range">10 – 50 U/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">64 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">34 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="lipase pancreas"><td class="bm-name">Lipase</td><td class="bm-range">10 – 50 U/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:6.2%;width:62.5%"></div>
@@ -2099,34 +1213,8 @@
       <div class="gauge-labels">
         <span>6</span><span>70</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval">24 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval">18 U/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-heavy-metals">
-    <h2 class="cat-heading">▼ Heavy Metals</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Mercury, Blood</td>
-      <td class="bm-range">≤ 5 mcg/L</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval">24 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval">18 U/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-heavy-metals"><h2 class="cat-heading">▼ Heavy Metals</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="mercury, blood heavy metals"><td class="bm-name">Mercury, Blood</td><td class="bm-range">≤ 5 mcg/L</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -2135,15 +1223,8 @@
       <div class="gauge-labels">
         <span>0</span><span>11</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><5 mcg/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><5 mcg/L</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Lead, Venous</td>
-      <td class="bm-range">≤ 2 mcg/dL</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><5 mcg/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><5 mcg/L</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="optimal" data-chase="optimal" data-zflag="0" data-cflag="0" data-search="lead, venous heavy metals"><td class="bm-name">Lead, Venous</td><td class="bm-range">≤ 2 mcg/dL</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:0.0%;width:45.5%"></div>
@@ -2152,34 +1233,8 @@
       <div class="gauge-labels">
         <span>0</span><span>4.4</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-opt"><div class="pval"><1.0 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-opt"><div class="pval"><1.0 mcg/dL</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section class="cat-section" id="cat-urine">
-    <h2 class="cat-heading">◑ Urine</h2>
-    <div class="table-wrap">
-    <table class="bm-table">
-      <thead>
-        <tr>
-          <th class="col-name">Biomarker</th>
-          <th class="col-range">Functional Range</th>
-          <th class="col-bar">Comparison</th>
-          <th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th>
-          <th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th>
-          <th class="col-person">Thomas<br><span class="test-date muted">—</span></th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td class="bm-name">Urine Specific Gravity</td>
-      <td class="bm-range">1.01 – 1.025</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-opt"><div class="pval"><1.0 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-opt"><div class="pval"><1.0 mcg/dL</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section><section class="cat-section" id="cat-urine"><h2 class="cat-heading">◑ Urine</h2><div class="table-wrap"><table class="bm-table"><thead><tr><th class="col-name">Biomarker</th><th class="col-range">Functional Range</th><th class="col-bar">Comparison</th><th class="col-person">Zach<br><span class="test-date">Apr 13, 2026</span></th><th class="col-person">Chase<br><span class="test-date">May 1, 2026</span></th><th class="col-person">Thomas<br><span class="test-date muted">—</span></th></tr></thead><tbody><tr class="bm-row" data-zach="low" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="urine specific gravity urine"><td class="bm-name">Urine Specific Gravity</td><td class="bm-range">1.01 – 1.025</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:48.7%;width:1.8%"></div>
@@ -2188,15 +1243,8 @@
       <div class="gauge-labels">
         <span>0.606</span><span>1.43</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-low"><div class="pval">1.004</div><span class="badge badge-low">Low</span></td>
-      <td class="person-cell lc-opt"><div class="pval">1.023</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-    <tr>
-      <td class="bm-name">Urine pH</td>
-      <td class="bm-range">6.0 – 7.5</td>
-      <td class="bm-bar">
+    </div></td><td class="person-cell lc-low"><div class="pval">1.004</div><span class="badge badge-low">Low</span></td><td class="person-cell lc-opt"><div class="pval">1.023</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+<tr class="bm-row" data-zach="high" data-chase="optimal" data-zflag="1" data-cflag="0" data-search="urine ph urine"><td class="bm-name">Urine pH</td><td class="bm-range">6.0 – 7.5</td><td class="bm-bar">
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-zone" style="left:34.8%;width:21.7%"></div>
@@ -2205,20 +1253,55 @@
       <div class="gauge-labels">
         <span>3.6</span><span>10.5</span>
       </div>
-    </div></td>
-      <td class="person-cell lc-high"><div class="pval">8.0</div><span class="badge badge-high">High</span></td>
-      <td class="person-cell lc-opt"><div class="pval">6.0</div><span class="badge badge-opt">Optimal</span></td>
-      <td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td>
-    </tr>
-      </tbody>
-    </table>
-    </div>
-  </section>
+    </div></td><td class="person-cell lc-high"><div class="pval">8.0</div><span class="badge badge-high">High</span></td><td class="person-cell lc-opt"><div class="pval">6.0</div><span class="badge badge-opt">Optimal</span></td><td class="person-cell lc-none"><div class="pval muted">—</div><span class="badge badge-none">—</span></td></tr>
+</tbody></table></div></section>
 </main>
 
 <footer>
+  <a href="../" style="color:var(--muted);text-decoration:none">&#8592; Back to index</a> &nbsp;·&nbsp;
   Functional thresholds from Function Health, Peter Attia MD, AHA/ACC, and Functional Medicine literature &nbsp;·&nbsp; Not medical advice
 </footer>
+
+<script>
+(function() {
+  const rows = Array.from(document.querySelectorAll('.bm-row'));
+  const sections = Array.from(document.querySelectorAll('.cat-section'));
+  const pills = Array.from(document.querySelectorAll('.pill'));
+  const searchEl = document.getElementById('search');
+  const countEl = document.getElementById('result-count');
+  let activeFilter = 'all', activeSearch = '';
+
+  function match(row) {
+    const zl = row.dataset.zach;
+    const cl = row.dataset.chase;
+    const zf = row.dataset.zflag === '1';
+    const cf = row.dataset.cflag === '1';
+    const text = row.dataset.search || '';
+    let filterOk = false;
+    if (activeFilter === 'all') filterOk = true;
+    else if (activeFilter === 'flagged') filterOk = zf || cf;
+    else if (activeFilter === 'zach-low') filterOk = zl === 'low';
+    else if (activeFilter === 'zach-high') filterOk = zl === 'high';
+    else if (activeFilter === 'chase-low') filterOk = cl === 'low';
+    else if (activeFilter === 'chase-high') filterOk = cl === 'high';
+    const searchOk = !activeSearch || text.includes(activeSearch);
+    return filterOk && searchOk;
+  }
+
+  function update() {
+    let visible = 0;
+    rows.forEach(r => { const show = match(r); r.classList.toggle('hidden', !show); if (show) visible++; });
+    sections.forEach(s => {
+      const any = Array.from(s.querySelectorAll('.bm-row')).some(r => !r.classList.contains('hidden'));
+      s.classList.toggle('all-hidden', !any);
+    });
+    countEl.textContent = visible === rows.length ? '' : visible + ' of ' + rows.length + ' shown';
+  }
+
+  pills.forEach(p => { p.addEventListener('click', () => { pills.forEach(x => x.classList.remove('active')); p.classList.add('active'); activeFilter = p.dataset.filter; update(); }); });
+  searchEl.addEventListener('input', () => { activeSearch = searchEl.value.toLowerCase().trim(); update(); });
+})();
+</script>
 
 </body>
 </html>
