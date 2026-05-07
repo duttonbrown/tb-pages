@@ -60,27 +60,30 @@
 
     /* ── Priority section ── */
     .priority-section { padding: 28px 40px 20px; border-bottom: 1px solid var(--border); }
-    .priority-heading { font-size: 11px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; }
+    .priority-hdr-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+    .priority-heading { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .ptabs { display: flex; gap: 4px; }
+    .ptab { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 4px 13px; font-size: 11px; font-weight: 500; color: var(--muted);
+      cursor: pointer; transition: all 0.12s; }
+    .ptab.active { background: var(--accent); border-color: var(--accent); color: #0d0f18; font-weight: 600; }
     .priority-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
-    .priority-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-      padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start;
-    }
+    .priority-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
     .priority-card.urgent { border-left: 3px solid #f87171; }
-    .priority-rank {
-      font-size: 13px; font-weight: 700; color: var(--muted);
-      min-width: 22px; text-align: right; padding-top: 1px; flex-shrink: 0;
-    }
-    .priority-body { flex: 1; min-width: 0; }
-    .priority-who { margin-bottom: 4px; display: flex; gap: 5px; flex-wrap: wrap; }
+    .p-header { display: flex; gap: 12px; align-items: center; padding: 12px 14px; cursor: pointer; user-select: none; }
+    .p-header:hover { background: rgba(255,255,255,0.018); }
+    .priority-rank { font-size: 13px; font-weight: 700; color: var(--muted); min-width: 20px; text-align: right; flex-shrink: 0; }
+    .priority-meta { flex: 1; min-width: 0; }
+    .priority-who { margin-bottom: 3px; display: flex; gap: 5px; flex-wrap: wrap; }
     .who-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 12px;
       text-transform: uppercase; letter-spacing: 0.5px; }
     .who-zach  { background: rgba(96,165,250,0.15); color: var(--zach-color); border: 1px solid rgba(96,165,250,0.3); }
     .who-chase { background: rgba(232,121,249,0.15); color: var(--chase-color); border: 1px solid rgba(232,121,249,0.3); }
     .who-both  { background: rgba(160,170,255,0.12); color: var(--accent); border: 1px solid rgba(160,170,255,0.3); }
-    .priority-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .priority-desc { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+    .priority-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .card-tog { font-size: 13px; color: var(--muted); transition: transform 0.15s; display: inline-block; flex-shrink: 0; opacity: 0.6; }
+    .priority-card.card-open .card-tog { transform: rotate(90deg); }
+    .priority-detail { display: none; padding: 0 14px 12px 46px; font-size: 11.5px; color: var(--muted); line-height: 1.6; }
 
     /* ── Category jump nav ── */
     .cat-nav {
@@ -264,97 +267,296 @@
 </header>
 
 <div class="priority-section">
-  <div class="priority-heading">Priority Actions — Top 10</div>
+  <div class="priority-hdr-row">
+    <div class="priority-heading">Priority Actions</div>
+    <div class="ptabs">
+      <button class="ptab active" onclick="switchPTab(this,'both')">Both</button>
+      <button class="ptab" onclick="switchPTab(this,'zach')">Zach</button>
+      <button class="ptab" onclick="switchPTab(this,'chase')">Chase</button>
+    </div>
+  </div>
   <div class="priority-grid">
 
-    <div class="priority-card urgent">
-      <div class="priority-rank">1</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-        <div class="priority-name">Rheumatology evaluation — do not delay</div>
-        <div class="priority-desc">ANA positive 1:80 + WBC 2.8 K/uL + ANC 963 — the most urgent finding across both reports. Reflex testing (anti-dsDNA, anti-Smith, anti-SSA/SSB, C3/C4) and rheumatology referral should not be delayed.</div>
+    <!-- ── BOTH ── -->
+
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">1</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Raise ferritin — both below lab minimum</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Zach 32 ng/mL / Chase 37 ng/mL — both below the lab floor of 38. Below 50 ng/mL is functionally low even with normal hemoglobin. Add heme iron (beef, liver, oysters) + iron bisglycinate 25–50 mg with vitamin C. Retest in 8–12 weeks.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">2</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-        <div class="priority-name">Reduce LDL particle burden (LDL-P, LDL Small, ApoB)</div>
-        <div class="priority-desc">Zach LDL-P 2253 / Chase LDL-P 1604 — both far above the 1138 lab threshold. Primary long-term cardiovascular risk marker. Intervention: cut refined carbohydrates, add soluble fiber (psyllium 10 g/day), increase EPA+DHA 3–4 g/day, physician discussion re: statin.</div>
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">2</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Reduce LDL particle count (LDL-P, ApoB)</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Zach LDL-P 2253 / Chase LDL-P 1604 — both above the lab max of 1138. Primary long-term cardiovascular risk marker. Soluble fiber 10 g/day, cut refined carbs, EPA+DHA 3–4 g/day, and a physician conversation about statin threshold.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">3</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-        <div class="priority-name">Dietary carbohydrate quality — Zach's root driver</div>
-        <div class="priority-desc">Triglycerides 187 + LDL-C 144 + Pattern B + high LDL-P all point to refined carbohydrate overconsumption as the primary driver. Replacing refined grains, added sugars, and alcohol with whole foods is the single highest-leverage intervention.</div>
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">3</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Increase EPA+DHA to 3+ g/day</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Both have room to raise omega-3 status. EPA+DHA directly lowers triglycerides, reduces LDL-P, and improves particle size. Fish oil or algal oil 3–4 g/day. Target OmegaCheck ≥ 8%. Retest in 90 days.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">4</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-        <div class="priority-name">Raise ferritin — both below lab minimum</div>
-        <div class="priority-desc">Zach 32 ng/mL / Chase 37 ng/mL — both below the lab minimum of 38. Below 50 ng/mL is functionally low even with normal hemoglobin. Add heme iron foods (beef, liver, oysters) and consider iron bisglycinate 25–50 mg/day with vitamin C. Retest in 8–12 weeks.</div>
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">4</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Shift to whole-food carbohydrates</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Refined carbs drive the lipid pattern seen in both panels — high LDL-P, small dense LDL, and elevated triglycerides. Replace processed grains, added sugars, and alcohol with legumes, vegetables, and intact whole grains.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">5</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-        <div class="priority-name">Retest AST/ALT after exercise rest</div>
-        <div class="priority-desc">AST 51 + ALT 51 — both flagged H above lab limits. Most likely exercise-induced elevation, not true liver pathology. Retest 48–72 hours after complete exercise rest and 2 weeks alcohol-free. If persistent: hepatitis B/C panel and abdominal ultrasound.</div>
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">5</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Coordinate retest panel in 90 days</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Iron, lipids, and omega-3 markers all respond within 60–90 days to dietary intervention. Getting bloodwork done at the same time creates a true head-to-head comparison and keeps accountability shared.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">6</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-        <div class="priority-name">Monitor TRT-related markers (Hgb, Hct)</div>
-        <div class="priority-desc">Hemoglobin 17.4 g/dL above lab max (17.1). Hematocrit 50.7% is near the 52% threshold for clinical phlebotomy. Ensure adequate hydration, discuss threshold with TRT prescriber, and monitor at every panel.</div>
+    <div class="priority-card" data-person="both">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">6</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
+          <div class="priority-name">Preventive cardiology or functional medicine consult</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">LDL-P levels in both panels — combined with young age — warrant a formal cardiovascular risk conversation. LDL-P is a stronger ASCVD predictor than LDL-C. A clinician who interprets particle data (not just standard lipid panels) is worth finding.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">7</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-        <div class="priority-name">Increase omega-3 intake (OmegaCheck borderline)</div>
-        <div class="priority-desc">OmegaCheck 5.4% is 0.1% below the lab minimum of 5.5%. Given elevated triglycerides and high LDL-P, reaching 7–8% is a meaningful cardiovascular target. Add EPA+DHA 2–3 g/day from fish oil or algal oil. Retest in 90 days.</div>
+    <!-- ── ZACH ── -->
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">1</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Dietary carb quality — root driver of entire lipid panel</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Triglycerides 187 + LDL-P 2253 + Pattern B LDL all trace back to refined carbohydrate overconsumption. Replacing refined grains, added sugars, and alcohol with whole foods is the single highest-leverage intervention available.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">8</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-        <div class="priority-name">Reduce SHBG — free testosterone impact</div>
-        <div class="priority-desc">SHBG 54 nmol/L above lab max (50). Elevated SHBG binds testosterone, reducing free testosterone bioavailability. Adequate dietary carbohydrates raise insulin which suppresses hepatic SHBG production. Ensure adequate zinc; boron 3–6 mg/day may help.</div>
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">2</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Reduce triglycerides to under 100 mg/dL (currently 187)</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Triglycerides 187 is in the borderline-high range and a direct driver of LDL pattern. Cut alcohol and added sugars first. EPA+DHA 3–4 g/day has a direct TG-lowering effect. Target under 100 for optimal cardiovascular risk.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">9</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-        <div class="priority-name">Eosinophil workup — allergic or environmental trigger</div>
-        <div class="priority-desc">Absolute eosinophils 583 cells/uL above lab max (500). Suggests elevated allergic load, environmental exposure, or parasitic infection. Consider IgE allergy panel, dietary elimination trial (dairy, gluten), and review seasonal symptom timing.</div>
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">3</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Investigate elevated blood lead (16.2 μg/dL)</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Lab max is 3.5 μg/dL — Zach is at 16.2, nearly 5x the threshold. Identify the exposure source (old paint, pipes, occupational, supplements). Discuss chelation evaluation with a physician who specializes in environmental medicine. This needs follow-up.</div>
     </div>
 
-    <div class="priority-card">
-      <div class="priority-rank">10</div>
-      <div class="priority-body">
-        <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-        <div class="priority-name">Retest creatinine off creatine supplementation</div>
-        <div class="priority-desc">Creatinine 1.27 mg/dL vs. lab max of 1.26 — a borderline elevation that is likely supplement-related, not renal. Stop creatine for 1–2 weeks before next draw, ensure 2–3L hydration. If elevated on retest with declining eGFR: nephrology referral.</div>
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">4</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Monitor TRT polycythemia risk at every draw</div>
+        </div>
+        <span class="card-tog">›</span>
       </div>
+      <div class="priority-detail">Hemoglobin 17.4 g/dL (max 17.1) + Hematocrit 50.7% (clinical phlebotomy threshold at 52%). TRT commonly elevates RBC mass. Discuss thresholds with prescriber, stay hydrated, and check every panel — not just annually.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">5</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Pattern B LDL reversal — shift particle size toward Pattern A</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">LDL Peak Size 216.6 Å vs. lab min of 222.9. Small dense LDL particles are more atherogenic than large buoyant LDL. The same dietary shift (cut refined carbs, add fiber and omega-3) that lowers LDL-P also drives pattern toward A.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">6</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Eosinophil workup — allergic or environmental load</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">Absolute eosinophils 583 cells/uL vs. lab max 500. Points to elevated allergic load, environmental exposure, or parasitic infection. Start with an IgE allergy panel and a dietary elimination trial (dairy, gluten). Review seasonal symptom patterns.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">7</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">OmegaCheck 5.4% → target 8% with EPA+DHA</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">0.1% below the lab minimum of 5.5%, but given elevated triglycerides and high LDL-P, targeting 8% is meaningful. Add EPA+DHA 2–3 g/day from fish oil or algal oil. Omega-3 index responds within 90 days.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">8</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Comprehensive TRT protocol review (E2, DHT, PSA, Hct)</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">With hemoglobin and hematocrit trending high, a full TRT monitoring panel is warranted: estradiol (E2), DHT, PSA, and Hct at minimum. Ensures the protocol is dialed in and not creating downstream risk.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">9</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">Ferritin repletion — titrate to 70–100 ng/mL</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">Ferritin 32 ng/mL — below the lab min of 38 and well below functional optimum of 70–100. Heme iron sources (beef, liver) + iron bisglycinate 25 mg with vitamin C on empty stomach. Avoid taking with coffee or calcium. Retest at 8 weeks.</div>
+    </div>
+
+    <div class="priority-card" data-person="zach" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">10</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
+          <div class="priority-name">LDL-P 2253 — most aggressive lipid intervention needed</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">Highest LDL-P in the cohort at nearly 2x the lab max. If diet alone doesn't move it meaningfully in 90 days, a physician conversation about a low-dose statin (or rosuvastatin + ezetimibe) is appropriate given the age and trajectory.</div>
+    </div>
+
+    <!-- ── CHASE ── -->
+
+    <div class="priority-card urgent" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">1</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Rheumatology evaluation — do not delay</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">ANA positive 1:80 + WBC 2.8 K/uL + ANC 963 — the most urgent finding across both reports. Order reflex testing (anti-dsDNA, anti-Smith, anti-SSA/SSB, C3/C4) and get a rheumatology referral. This should not wait for the next routine visit.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">2</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">WBC / neutrophil monitoring — retest every 3 months</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">WBC 2.8 K/uL (min 3.8) + ANC 963 (min 1500) suggest immune suppression or bone marrow issue. In the context of a positive ANA this is especially important to track. Retest every 3 months until the pattern is understood and stable.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">3</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Retest AST/ALT after exercise rest and alcohol-free period</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">AST 51 + ALT 51 — both above lab limits, but most likely exercise-induced rather than true liver pathology. Retest 48–72 hours after complete exercise rest and 2 full weeks alcohol-free. If persistent: hepatitis B/C panel and abdominal ultrasound.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">4</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Reduce SHBG 54 — free testosterone impact</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">SHBG 54 nmol/L (max 50) binds testosterone, reducing free T bioavailability. Adequate dietary carbohydrates raise insulin which suppresses hepatic SHBG production. Zinc sufficiency helps; boron 3–6 mg/day may also reduce SHBG. Check free T on next draw.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">5</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Retest creatinine off creatine supplementation</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">Creatinine 1.27 mg/dL vs. lab max 1.26 — borderline and almost certainly supplement-related, not renal. Stop creatine for 1–2 weeks before next draw. Ensure 2–3 L hydration daily. If elevated on retest with declining eGFR: nephrology referral.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">6</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Anti-inflammatory diet while awaiting rheum eval</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">ANA positivity + low WBC justifies a dietary elimination trial (gluten, dairy, processed foods) while waiting for specialist workup. Omega-3s, colorful vegetables, and minimizing alcohol reduce systemic inflammation and won't interfere with testing.</div>
+    </div>
+
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">7</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Vitamin D optimization — immune and hormonal foundation</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail">Vitamin D is foundational for immune regulation and testosterone production. If not already tested, add 25-OH Vitamin D to the next draw. Most functional practitioners target 50–80 ng/mL. Deficiency is common and correctable with D3 + K2 supplementation.</div>
     </div>
 
   </div>
@@ -1162,6 +1364,21 @@
 </footer>
 
 <script>
+function switchPTab(btn, person) {
+  document.querySelectorAll('.ptab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.priority-card').forEach(function(c) {
+    c.style.display = c.dataset.person === person ? '' : 'none';
+  });
+}
+
+function toggleCard(card) {
+  var det = card.querySelector('.priority-detail');
+  var open = card.classList.contains('card-open');
+  card.classList.toggle('card-open', !open);
+  det.style.display = open ? 'none' : 'block';
+}
+
 function toggleDetail(row) {
   var id = row.dataset.toggle;
   if (!id) return;
