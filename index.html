@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thomas Brown — Pages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #140e09;
+      --surface:  #1f1510;
+      --surface2: #2a1c12;
+      --border:   #6b4a30;
+      --text:     #f2e4d0;
+      --muted:    #a08060;
+      --accent:   #c8851a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #251a10 0%, #1a1008 100%);
+      border-bottom: 2px solid var(--border);
+      padding: 48px 48px 40px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    main {
+      flex: 1;
+      padding: 48px;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    .section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-arrow {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    footer {
+      padding: 24px 48px;
+      color: var(--muted);
+      font-size: 11px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      header, main, footer { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Thomas Brown — Pages</h1>
+  <p>Published reports, dashboards, and tools.</p>
+</header>
+
+<main>
+
+  <div class="section">
+    <div class="section-title">Health</div>
+    <div class="card-grid">
+
+      <a class="card" href="/tb-pages/health-dashboard/">
+        <div class="card-label">Dashboard</div>
+        <div class="card-title">Function Health Comparison</div>
+        <div class="card-desc">
+          99 biomarkers across Zach, Chase, and Thomas — organized by Function Health category with gauge bars and functional ranges.
+        </div>
+        <div class="card-arrow">View dashboard →</div>
+      </a>
+
+      <a class="card" href="/tb-pages/relationships/zach/">
+        <div class="card-label">
+          <span class="dot" style="background:#60a5fa"></span>Zach Dutton
+        </div>
+        <div class="card-title">Function Health Biomarker Report</div>
+        <div class="card-desc">
+          Quest Diagnostics · Apr 13, 2026<br>
+          63 Optimal · 15 Low · 21 High
+        </div>
+        <div class="card-arrow">View report →</div>
+      </a>
+
+      <a class="card" href="/tb-pages/relationships/chase/">
+        <div class="card-label">
+          <span class="dot" style="background:#e879f9"></span>Chase Anderson
+        </div>
+        <div class="card-title">Function Health Biomarker Report</div>
+        <div class="card-desc">
+          Quest Diagnostics · May 1, 2026<br>
+          68 Optimal · 14 Low · 17 High
+        </div>
+        <div class="card-arrow">View report →</div>
+      </a>
+
+      <a class="card" href="#" style="opacity:0.45;pointer-events:none">
+        <div class="card-label">
+          <span class="dot" style="background:#2dd4bf"></span>Thomas Brown
+        </div>
+        <div class="card-title">Function Health Biomarker Report</div>
+        <div class="card-desc">
+          Pending — report will appear here after test results are added.
+        </div>
+        <div class="card-arrow">Coming soon</div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Other</div>
+    <div class="card-grid">
+
+      <a class="card" href="/tb-pages/swiftbladefelix/">
+        <div class="card-label">Project</div>
+        <div class="card-title">Swift Blade Felix</div>
+        <div class="card-desc">
+          Published project page.
+        </div>
+        <div class="card-arrow">View →</div>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  thomasbrown-personal.github.io/tb-pages
+</footer>
+
+</body>
+</html>
