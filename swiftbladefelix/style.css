@@ -875,6 +875,32 @@ a { color: inherit; text-decoration: none; }
 
 .launch-body strong { color: var(--cream); }
 
+.substeps {
+  margin: 0.85rem 0 0 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.substeps li {
+  font-size: 0.9rem;
+  color: rgba(240, 237, 230, 0.65);
+  line-height: 1.65;
+  padding-left: 0.4rem;
+}
+
+.substeps li::marker { color: var(--neon); font-family: var(--font-sans); font-size: 0.85em; }
+.substeps strong { color: var(--cream); }
+.substeps a { color: var(--neon); border-bottom: 1px solid var(--neon-dim); padding-bottom: 1px; }
+.substeps code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  color: var(--neon);
+  background: rgba(57,255,20,0.08);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+}
+
 /* Steps grid */
 .guide-steps {
   display: grid;
