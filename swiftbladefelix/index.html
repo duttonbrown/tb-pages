@@ -8,6 +8,13 @@
   <meta property="og:title" content="Swift Blade Hair">
   <meta property="og:description" content="Sharp cuts. Real vibes. Minneapolis made.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://duttonbrown.github.io/tb-pages/swiftbladefelix/">
+  <meta property="og:image" content="https://duttonbrown.github.io/tb-pages/swiftbladefelix/logo.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#030303">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <!-- Google Fonts: Cormorant SC · Cormorant · Instrument Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +22,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;600&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- Helps Google show Swift Blade in local search results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HairSalon",
+    "name": "Swift Blade Hair",
+    "description": "Sharp cuts. Real vibes. Minneapolis made. Cuts, color, extensions, and fades by Felix Esuna.",
+    "url": "https://www.swiftbladehair.com",
+    "telephone": "+19529179269",
+    "image": "https://duttonbrown.github.io/tb-pages/swiftbladefelix/logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "711 W Lake St",
+      "addressLocality": "Minneapolis",
+      "addressRegion": "MN",
+      "postalCode": "55408",
+      "addressCountry": "US"
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "11:00",
+      "closes": "18:00"
+    }],
+    "sameAs": [
+      "https://www.instagram.com/swiftbladefelix/",
+      "https://www.tiktok.com/@swiftbladefelix",
+      "https://www.facebook.com/Swiftblade-Hair-103733402083191/"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -24,7 +63,7 @@
   <!-- ─── Navigation ─── -->
   <nav class="nav" id="nav">
     <a href="#top" class="nav-logo">
-      <img src="logo.png" alt="Swift Blade Hair" class="nav-logo-img">
+      <img src="logo.png" alt="Swift Blade Hair" class="nav-logo-img" width="556" height="720">
     </a>
     <a href="https://www.swiftbladehair.com/s/appointments" target="_blank" rel="noopener noreferrer" class="btn btn-nav">Book Now</a>
   </nav>
@@ -43,7 +82,7 @@
 
       <!-- His actual logo — the brand centerpiece -->
       <div class="hero-logo-wrap">
-        <img src="logo.png" alt="Swift Blade" class="hero-logo">
+        <img src="logo.png" alt="Swift Blade" class="hero-logo" width="556" height="720" fetchpriority="high">
       </div>
 
       <h1 class="hero-title">
@@ -70,13 +109,12 @@
 
   </section>
 
-  <!-- Blade divider -->
-  <div class="blade-divider" aria-hidden="true">
-    <svg width="220" height="14" viewBox="0 0 220 14" fill="none">
-      <line x1="0"   y1="7" x2="96"  y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
-      <polygon points="110,1 117,7 110,13 103,7" fill="#39FF14" opacity="0.7"/>
-      <line x1="124" y1="7" x2="220" y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
-    </svg>
+  <!-- ─── Blade ticker ─── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-seq">Sharp cuts<i class="tick-sword">⚔</i>Real vibes<i class="tick-sword">⚔</i>Minneapolis made<i class="tick-sword">⚔</i>Swift Blade Hair<i class="tick-sword">⚔</i></span>
+      <span class="ticker-seq">Sharp cuts<i class="tick-sword">⚔</i>Real vibes<i class="tick-sword">⚔</i>Minneapolis made<i class="tick-sword">⚔</i>Swift Blade Hair<i class="tick-sword">⚔</i></span>
+    </div>
   </div>
 
   <!-- ─── About ─── -->
@@ -99,7 +137,7 @@
         </div>
 
         <div class="about-photo-wrap">
-          <img src="felix-salon.jpg" alt="Inside the Swift Blade Hair salon" class="about-photo">
+          <img src="felix-salon.jpg" alt="Inside the Swift Blade Hair salon" class="about-photo" width="640" height="1136" loading="lazy" decoding="async">
         </div>
 
       </div>
@@ -108,10 +146,23 @@
 
   <!-- Blade divider -->
   <div class="blade-divider" aria-hidden="true">
-    <svg width="220" height="14" viewBox="0 0 220 14" fill="none">
-      <line x1="0"   y1="7" x2="96"  y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
-      <polygon points="110,1 117,7 110,13 103,7" fill="#39FF14" opacity="0.7"/>
-      <line x1="124" y1="7" x2="220" y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
+    <svg width="260" height="16" viewBox="0 0 260 16" fill="none">
+      <defs>
+        <linearGradient id="bladeL" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#2e2e2e" stop-opacity="0"/>
+          <stop offset="1" stop-color="#2e2e2e"/>
+        </linearGradient>
+        <linearGradient id="bladeR" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0" stop-color="#2e2e2e" stop-opacity="0"/>
+          <stop offset="1" stop-color="#2e2e2e"/>
+        </linearGradient>
+      </defs>
+      <line x1="6" y1="8" x2="106" y2="8" stroke="url(#bladeL)" stroke-width="1"/>
+      <line x1="114" y1="3" x2="114" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <circle cx="130" cy="8" r="7" fill="#39FF14" opacity="0.12"/>
+      <polygon points="130,2 136,8 130,14 124,8" fill="#39FF14" opacity="0.8"/>
+      <line x1="146" y1="3" x2="146" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <line x1="154" y1="8" x2="254" y2="8" stroke="url(#bladeR)" stroke-width="1"/>
     </svg>
   </div>
 
@@ -144,10 +195,13 @@
 
   <!-- Blade divider -->
   <div class="blade-divider" aria-hidden="true">
-    <svg width="220" height="14" viewBox="0 0 220 14" fill="none">
-      <line x1="0"   y1="7" x2="96"  y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
-      <polygon points="110,1 117,7 110,13 103,7" fill="#39FF14" opacity="0.7"/>
-      <line x1="124" y1="7" x2="220" y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
+    <svg width="260" height="16" viewBox="0 0 260 16" fill="none">
+      <line x1="6" y1="8" x2="106" y2="8" stroke="url(#bladeL)" stroke-width="1"/>
+      <line x1="114" y1="3" x2="114" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <circle cx="130" cy="8" r="7" fill="#39FF14" opacity="0.12"/>
+      <polygon points="130,2 136,8 130,14 124,8" fill="#39FF14" opacity="0.8"/>
+      <line x1="146" y1="3" x2="146" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <line x1="154" y1="8" x2="254" y2="8" stroke="url(#bladeR)" stroke-width="1"/>
     </svg>
   </div>
 
@@ -161,13 +215,14 @@
           <h2 class="section-heading">Come In</h2>
           <div class="address-lines">
             <span class="address-line">711 W Lake St</span>
-            <span class="address-line">Minneapolis, MN 55406</span>
+            <span class="address-line">Minneapolis, MN 55408</span>
           </div>
           <a href="https://maps.google.com/?q=711+W+Lake+St+Minneapolis+MN+55408" target="_blank" rel="noopener noreferrer" class="directions-link">Get Directions →</a>
         </div>
 
         <div class="reveal" style="--delay: 0.14s">
           <span class="section-label">Hours</span>
+          <p class="open-status" id="open-status" hidden><span class="status-dot" aria-hidden="true"></span><span class="status-text"></span></p>
           <div class="hours-table">
             <div class="hours-row">
               <span class="hours-day">Thursday – Sunday</span>
@@ -187,10 +242,13 @@
 
   <!-- Blade divider -->
   <div class="blade-divider" aria-hidden="true">
-    <svg width="220" height="14" viewBox="0 0 220 14" fill="none">
-      <line x1="0"   y1="7" x2="96"  y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
-      <polygon points="110,1 117,7 110,13 103,7" fill="#39FF14" opacity="0.7"/>
-      <line x1="124" y1="7" x2="220" y2="7" stroke="#1a1a1a" stroke-width="0.75"/>
+    <svg width="260" height="16" viewBox="0 0 260 16" fill="none">
+      <line x1="6" y1="8" x2="106" y2="8" stroke="url(#bladeL)" stroke-width="1"/>
+      <line x1="114" y1="3" x2="114" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <circle cx="130" cy="8" r="7" fill="#39FF14" opacity="0.12"/>
+      <polygon points="130,2 136,8 130,14 124,8" fill="#39FF14" opacity="0.8"/>
+      <line x1="146" y1="3" x2="146" y2="13" stroke="#2e2e2e" stroke-width="1"/>
+      <line x1="154" y1="8" x2="254" y2="8" stroke="url(#bladeR)" stroke-width="1"/>
     </svg>
   </div>
 
@@ -248,19 +306,76 @@
         <a href="https://www.swiftbladehair.com/s/appointments" target="_blank" rel="noopener noreferrer">Book Now</a>
         <a href="https://www.instagram.com/swiftbladefelix/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="tel:+19529179269">(952) 917-9269</a>
-        <a href="#chatgpt-guide">Site Guide for Felix ↓</a>
+        <a href="#for-felix">Site Guide for Felix ↓</a>
       </nav>
       <p class="footer-copy">© 2026 Swift Blade Hair &nbsp;·&nbsp; Minneapolis, MN</p>
     </div>
   </footer>
 
-  <!-- ─── ChatGPT Guide for Felix ─── -->
-  <section class="chatgpt-guide" id="chatgpt-guide">
+  <!-- ─── Guide for Felix ─── -->
+  <section class="chatgpt-guide" id="for-felix">
     <div class="guide-inner">
 
       <div class="guide-header">
         <span class="guide-tag">For Felix</span>
-        <h2 class="guide-title">How to Update Your Site with ChatGPT</h2>
+        <h2 class="guide-title">Your Launch Checklist</h2>
+        <p class="guide-intro">Do these once, in order, and this site is fully yours — live on swiftbladehair.com, $0/month hosting, and ChatGPT doing all the code. After launch, any update takes five minutes.</p>
+      </div>
+
+      <ol class="launch-list">
+        <li class="launch-item">
+          <span class="launch-num">1</span>
+          <div>
+            <h3 class="launch-title">Preview the site</h3>
+            <p class="launch-body">Open the <code>swiftbladefelix</code> folder and double-click <code>index.html</code>. That's the whole site, running from your own computer. Everything else in the folder (photos, <code>style.css</code>) has to stay next to it.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">2</span>
+          <div>
+            <h3 class="launch-title">Make it yours with ChatGPT</h3>
+            <p class="launch-body">Hours changed? New service? Want different words or photos? The editing guide below shows the exact copy-paste routine — no code knowledge needed.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">3</span>
+          <div>
+            <h3 class="launch-title">Grab your permanent Square booking link</h3>
+            <p class="launch-body">In your Square Dashboard: <strong>Appointments → Online Booking</strong> → copy your booking page link (it looks like <code>squareup.com/appointments/…</code>). The Book buttons on this site currently point at your old Square website's booking page, which disappears in step 6 — so swap in the permanent link first. There's a ready-made ChatGPT prompt below.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">4</span>
+          <div>
+            <h3 class="launch-title">Put the site online — free</h3>
+            <p class="launch-body">Go to <a href="https://netlify.com/drop" target="_blank" rel="noopener">netlify.com/drop</a> and drag the whole <code>swiftbladefelix</code> folder onto the page. The site is live in about 30 seconds at a free web address. Make a free Netlify account so you can keep it and update it later.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">5</span>
+          <div>
+            <h3 class="launch-title">Connect swiftbladehair.com</h3>
+            <p class="launch-body">In Netlify: <strong>Domain settings → Add custom domain</strong> → type <code>swiftbladehair.com</code> and follow its DNS instructions wherever you pay for the domain (likely Square or GoDaddy). The switch takes 15 minutes to 24 hours. Your old site keeps working until then — no gap.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">6</span>
+          <div>
+            <h3 class="launch-title">Cancel ONLY the Square Online site plan</h3>
+            <p class="launch-body">Once swiftbladehair.com shows the new site, cancel the Square <em>Online</em> (website) subscription. <strong>Keep Square Appointments</strong> — that's your booking, payments, and client list. Nothing changes for your clients.</p>
+          </div>
+        </li>
+        <li class="launch-item">
+          <span class="launch-num">7</span>
+          <div>
+            <h3 class="launch-title">Update your listings</h3>
+            <p class="launch-body">Point your Instagram and TikTok bio links at the site, and make sure Square and your Google Business Profile both show <strong>711 W Lake St</strong> — some listings still show the old Franklin Ave address, which sends new clients to the wrong place.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="guide-header">
+        <h2 class="guide-title">Everyday Edits with ChatGPT</h2>
         <p class="guide-intro">You don't need to know code. ChatGPT can make any change to this site for you — just tell it what you want. Here's exactly how.</p>
       </div>
 
@@ -269,7 +384,7 @@
         <div class="guide-step">
           <span class="step-num">01</span>
           <h3 class="step-title">Open your site file</h3>
-          <p class="step-body">Find the file <code>index.html</code> on your computer (in the <code>swiftbladefelix-site</code> folder). Right-click → Open With → Notepad. Select all (Ctrl+A), copy (Ctrl+C).</p>
+          <p class="step-body">Find the file <code>index.html</code> on your computer (in the <code>swiftbladefelix</code> folder). Right-click → Open With → Notepad (or TextEdit on Mac). Select all (Ctrl+A), copy (Ctrl+C).</p>
         </div>
 
         <div class="guide-step">
@@ -282,13 +397,13 @@
           <span class="step-num">03</span>
           <h3 class="step-title">Use this prompt</h3>
           <div class="prompt-block">I have a personal salon website as a single HTML file. I want to [<em>describe your change here</em>]. Please give me the complete updated index.html file with that change made. Keep everything else exactly the same. Here is the current file:<br><br>[<em>paste your index.html here</em>]</div>
-          <p class="step-body">ChatGPT gives you the updated file. Copy it, paste back into Notepad, save (Ctrl+S).</p>
+          <p class="step-body">ChatGPT gives you the updated file. Copy it, paste back into Notepad over the old contents, save (Ctrl+S). Double-click <code>index.html</code> to check it in your browser.</p>
         </div>
 
         <div class="guide-step">
           <span class="step-num">04</span>
-          <h3 class="step-title">Go live instantly</h3>
-          <p class="step-body">Drag your <code>swiftbladefelix-site</code> folder onto <a href="https://netlify.com/drop" target="_blank" rel="noopener">netlify.com/drop</a>. Your site is live in seconds. Free, no account needed.</p>
+          <h3 class="step-title">Publish the update</h3>
+          <p class="step-body">Log into Netlify, open your site, go to <strong>Deploys</strong>, and drag the <code>swiftbladefelix</code> folder in again. The live site updates in seconds.</p>
         </div>
 
       </div>
@@ -297,8 +412,12 @@
         <h3 class="guide-prompts-title">Ready-to-use prompts — just fill in the blanks</h3>
         <ul class="prompt-list">
           <li class="prompt-item">
+            <span class="prompt-label">Swap in your Square booking link</span>
+            <div class="prompt-text">"Change every booking link from 'swiftbladehair.com/s/appointments' to my permanent Square booking link: [paste your squareup.com/appointments link]. Keep everything else the same."</div>
+          </li>
+          <li class="prompt-item">
             <span class="prompt-label">Change hours</span>
-            <div class="prompt-text">"Update my business hours to: Thursday–Sunday [time]. Monday–Wednesday Closed. Keep everything else the same."</div>
+            <div class="prompt-text">"Update my business hours to: Thursday–Sunday [time]. Monday–Wednesday Closed. Update the hours everywhere they appear, including the open/closed badge logic in the script. Keep everything else the same."</div>
           </li>
           <li class="prompt-item">
             <span class="prompt-label">Add a service</span>
@@ -309,12 +428,12 @@
             <div class="prompt-text">"Remove '[service name]' from the services list and renumber the remaining services. Keep everything else the same."</div>
           </li>
           <li class="prompt-item">
-            <span class="prompt-label">Update booking link</span>
-            <div class="prompt-text">"Change all booking links from 'swiftbladehair.com/s/appointments' to '[your new link]'. Keep everything else the same."</div>
+            <span class="prompt-label">Add prices</span>
+            <div class="prompt-text">"Add prices next to each service, like this: Balayage $[amount], Fades $[amount], [continue for each]. Style them subtly so the design stays clean. Keep everything else the same."</div>
           </li>
           <li class="prompt-item">
             <span class="prompt-label">Update address</span>
-            <div class="prompt-text">"Update my address to '[new address]' everywhere it appears, including the Google Maps link. Keep everything else the same."</div>
+            <div class="prompt-text">"Update my address to '[new address]' everywhere it appears, including the Google Maps links and the hidden SEO data near the top of the file. Keep everything else the same."</div>
           </li>
           <li class="prompt-item">
             <span class="prompt-label">Change phone number</span>
@@ -330,7 +449,7 @@
           </li>
           <li class="prompt-item">
             <span class="prompt-label">Change the tagline</span>
-            <div class="prompt-text">"Change the tagline 'Sharp cuts. Real vibes. Minneapolis made.' to '[your new tagline]'. Keep everything else the same."</div>
+            <div class="prompt-text">"Change the tagline 'Sharp cuts. Real vibes. Minneapolis made.' to '[your new tagline]' — and update the scrolling ticker text to match. Keep everything else the same."</div>
           </li>
           <li class="prompt-item">
             <span class="prompt-label">Add a new section</span>
@@ -345,9 +464,8 @@
           <li><strong>Always say "keep everything else exactly the same"</strong> — stops ChatGPT from redesigning things you didn't ask it to touch.</li>
           <li><strong>If it only gives you part of the file</strong>, say "Give me the complete file, not just the changed section."</li>
           <li><strong>If something breaks</strong>, say "That broke something. Please revert to the original and only make the one change I asked for."</li>
-          <li><strong>Save a backup</strong> of index.html before every change (rename it to index-backup.html) so you can always go back.</li>
+          <li><strong>Save a backup</strong> of index.html before every change (copy it and rename the copy to index-backup.html) so you can always go back.</li>
           <li><strong>For bigger redesigns</strong>, paste the live site URL and say "Here's what it looks like: [URL]. I want to change the color / font / layout of [X]..."</li>
-          <li><strong>Claude (claude.ai) works too</strong> and is often better for longer files — same process, same prompts.</li>
         </ul>
       </div>
 
@@ -377,6 +495,24 @@
       { threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    // Open/closed badge — hours: Thu–Sun 11am–6pm, Minneapolis time
+    try {
+      const mpls = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+      const day = mpls.getDay(); // 0 = Sunday … 6 = Saturday
+      const hour = mpls.getHours() + mpls.getMinutes() / 60;
+      const isOpenDay = day === 0 || day >= 4; // Sun, Thu, Fri, Sat
+      const isOpen = isOpenDay && hour >= 11 && hour < 18;
+      let text;
+      if (isOpen) text = 'Open now · until 6pm';
+      else if (isOpenDay && hour < 11) text = 'Closed · opens today at 11am';
+      else if (day >= 4 && day <= 6) text = 'Closed · opens tomorrow at 11am';
+      else text = 'Closed · opens Thursday at 11am';
+      const chip = document.getElementById('open-status');
+      chip.querySelector('.status-text').textContent = text;
+      chip.classList.add(isOpen ? 'is-open' : 'is-closed');
+      chip.hidden = false;
+    } catch (e) { /* no badge if anything fails — hours table still shows */ }
   </script>
 
 </body>
