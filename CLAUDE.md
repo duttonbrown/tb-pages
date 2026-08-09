@@ -4,7 +4,7 @@
 > **Owns:** Thomas's personal published pages & projects (public GitHub Pages). Personal, not brand-related.
 > Master cross-repo rules & area map: `~/repos/CLAUDE.md` (source: `systems/repos-CLAUDE.md`). Keep out-of-scope work in its home repo.
 > **Sync:** `syncpull` at session start · `syncpush` after edits (`dbpush`/`ilypush` brand-scoped, `dbs` status) — see `~/repos/SYNC-GUIDE.md`.
-> **Cowork:** Claude edits files (they sync to disk) but does **NOT** run git — the mount corrupts `.git/index`. Thomas runs the sync commands; read-only git inspection is fine.
+> **Cowork:** Claude edits files (they sync to disk) but does **NOT** run git — not even read-only; any git command in the Cowork mount strands `.git/index.lock` (fix: `rm -f .git/index.lock`). Thomas runs the sync commands.
 
 ## What this is
 
@@ -12,7 +12,7 @@ Thomas's personal published pages and projects, served via GitHub Pages at https
 
 ## Structure
 
-- `swiftbladefelix/` — SwiftBladeFlix website
+- `swiftbladefelix/` — SwiftBladeFelix website
 - `health-dashboard/` — personal health dashboard
 - `relationships/` — personal project
 - `index.html` — landing page
