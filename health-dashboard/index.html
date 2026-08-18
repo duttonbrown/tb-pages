@@ -81,6 +81,9 @@
     .who-zach  { background: rgba(96,165,250,0.15); color: var(--zach-color); border: 1px solid rgba(96,165,250,0.3); }
     .who-chase { background: rgba(232,121,249,0.15); color: var(--chase-color); border: 1px solid rgba(232,121,249,0.3); }
     .who-both  { background: rgba(160,170,255,0.12); color: var(--accent); border: 1px solid rgba(160,170,255,0.3); }
+    .who-thomas { background: rgba(45,212,191,0.15); color: var(--thomas-color); border: 1px solid rgba(45,212,191,0.3); }
+    .p-acts { margin: 7px 0 0; padding-left: 16px; }
+    .p-acts li { margin-bottom: 3px; }
     .priority-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .card-tog { font-size: 13px; color: var(--muted); transition: transform 0.15s; display: inline-block; flex-shrink: 0; opacity: 0.6; }
     .priority-card.card-open .card-tog { transform: rotate(90deg); }
@@ -273,295 +276,409 @@
   <div class="priority-hdr-row">
     <div class="priority-heading">Priority Actions</div>
     <div class="ptabs">
-      <button class="ptab active" onclick="switchPTab(this,'both')">Both</button>
+      <button class="ptab active" onclick="switchPTab(this,'all')">All three</button>
       <button class="ptab" onclick="switchPTab(this,'zach')">Zach</button>
       <button class="ptab" onclick="switchPTab(this,'chase')">Chase</button>
+      <button class="ptab" onclick="switchPTab(this,'thomas')">Thomas</button>
     </div>
   </div>
   <div class="priority-grid">
-
-    <!-- ── BOTH ── -->
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card urgent" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">1</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Raise ferritin — both below lab minimum</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Lipoprotein particle quality - five markers, all three of you</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Zach 32 ng/mL / Chase 37 ng/mL — both below the lab floor of 38. Below 50 ng/mL is functionally low even with normal hemoglobin. Add heme iron (beef, liver, oysters) + iron bisglycinate 25–50 mg with vitamin C. Retest in 8–12 weeks.</div>
+      <div class="priority-detail">LDL-P (Zach 2253 nmol/L / Chase 1604 nmol/L / Thomas 1363 nmol/L), small LDL, medium LDL, peak size and large-HDL are all flagged the same direction in every panel. Strongest shared signal here, and the one a standard lipid panel misses entirely. Thomas is the proof: LDL-C 86 mg/dL and ApoB 77 mg/dL are both optimal, yet LDL-P is 1363 nmol/L and large-HDL 4900 nmol/L is the lowest of the three. Levers: soluble fiber 15-20 g/day, EPA+DHA 3-4 g/day, cut refined carbs and fructose, aerobic work 150-200 min/week.</div>
     </div>
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">2</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Reduce LDL particle count (LDL-P, ApoB)</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Cut omega-6 cooking oils - the clearest shared-kitchen signal</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Zach LDL-P 2253 / Chase LDL-P 1604 — both above the lab max of 1138. Primary long-term cardiovascular risk marker. Soluble fiber 10 g/day, cut refined carbs, EPA+DHA 3–4 g/day, and a physician conversation about statin threshold.</div>
+      <div class="priority-detail">Omega-6 total: Zach 32.6 % / Chase 33.8 % / Thomas 33.8 % against a 20-30% target. Three different bodies landing on nearly the same number points at the food supply, not genetics. Omega-3 is already fine in all three (ratio Zach 6.0 ratio / Chase 4.7 ratio / Thomas 5.2 ratio), so this is not 'eat more fish' - it is the absolute omega-6 load. Swap soybean/corn/sunflower/safflower/canola for olive oil, butter, ghee or avocado oil.</div>
     </div>
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">3</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Increase EPA+DHA to 3+ g/day</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Raise ferritin - all three below 50 ng/mL</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Both have room to raise omega-3 status. EPA+DHA directly lowers triglycerides, reduces LDL-P, and improves particle size. Fish oil or algal oil 3–4 g/day. Target OmegaCheck ≥ 8%. Retest in 90 days.</div>
+      <div class="priority-detail">Ferritin: Zach 32 ng/mL / Chase 37 ng/mL / Thomas 20 ng/mL. Below 50 is functionally low even with normal hemoglobin. Thomas is the outlier and needs the most aggressive version - serum iron 66 mcg/dL is low outright and saturation 20 % sits at the floor. Heme iron (beef, liver, oysters) first; iron bisglycinate 25-50 mg with vitamin C, away from coffee and calcium. Retest at 8-12 weeks.</div>
     </div>
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">4</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Shift to whole-food carbohydrates</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Add Cystatin C - resolves the shared eGFR question in one test</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Refined carbs drive the lipid pattern seen in both panels — high LDL-P, small dense LDL, and elevated triglycerides. Replace processed grains, added sugars, and alcohol with legumes, vegetables, and intact whole grains.</div>
+      <div class="priority-detail">Creatinine is high and eGFR low in all three (eGFR Zach 79 mL/min / Chase 76 mL/min / Thomas 80 mL/min), which looks alarming and probably is not: urine albumin is optimal in all three, creatinine is muscle-derived, and you are three lean active men - two on testosterone. Cystatin C is not muscle-dependent, so it settles the question. Anyone supplementing creatine should stop 1-2 weeks before the draw.</div>
     </div>
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">5</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Coordinate retest panel in 90 days</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Low lymphocytes across all three - watch as a group</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Iron, lipids, and omega-3 markers all respond within 60–90 days to dietary intervention. Getting bloodwork done at the same time creates a true head-to-head comparison and keeps accountability shared.</div>
+      <div class="priority-detail">Absolute lymphocytes: Zach 1133 cells/uL / Chase 1361 cells/uL / Thomas 1173 cells/uL against a 1500-3500 target. Chase and Thomas are also low on WBC and neutrophils. Not urgent alone, but a shared pattern across three people in one household earns a repeat CBC rather than a shrug.</div>
     </div>
-
-    <div class="priority-card" data-person="both">
+    <div class="priority-card" data-person="all">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">6</span>
         <div class="priority-meta">
-          <div class="priority-who"><span class="who-tag who-both">Both</span></div>
-          <div class="priority-name">Preventive cardiology or functional medicine consult</div>
+          <div class="priority-who"><span class="who-tag who-both">All three</span></div>
+          <div class="priority-name">Coordinate the next draw - same week, all three</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">LDL-P levels in both panels — combined with young age — warrant a formal cardiovascular risk conversation. LDL-P is a stronger ASCVD predictor than LDL-C. A clinician who interprets particle data (not just standard lipid panels) is worth finding.</div>
+      <div class="priority-detail">Iron, lipids and omega-3 all move within 60-90 days of dietary change. Drawing together keeps the comparison honest and the accountability shared. Current panels: Zach Apr 13, Chase May 1, Thomas May 8 2026 - already three months stale for acting on.</div>
     </div>
-
-    <!-- ── ZACH ── -->
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">1</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Dietary carb quality — root driver of entire lipid panel</div>
+          <div class="priority-name">LDL Particle Number — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Triglycerides 187 + LDL-P 2253 + Pattern B LDL all trace back to refined carbohydrate overconsumption. Replacing refined grains, added sugars, and alcohol with whole foods is the single highest-leverage intervention available.</div>
+      <div class="priority-detail"><strong>2253 nmol/L</strong> vs functional target ≤ 1000. 2253 nmol/L — above lab max (1138). Zach&#x27;s highest cardiovascular risk marker. <ul class="p-acts"><li>Priority intervention: reduce refined carbs, increase soluble fiber</li><li>EPA+DHA 3–4 g/day specifically reduces LDL particle count</li><li>Physician: statin therapy is highly effective for LDL-P</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">2</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Reduce triglycerides to under 100 mg/dL (currently 187)</div>
+          <div class="priority-name">Apolipoprotein B — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Triglycerides 187 is in the borderline-high range and a direct driver of LDL pattern. Cut alcohol and added sugars first. EPA+DHA 3–4 g/day has a direct TG-lowering effect. Target under 100 for optimal cardiovascular risk.</div>
+      <div class="priority-detail"><strong>123 mg/dL</strong> vs functional target ≤ 80. 123 mg/dL — above lab max (90). High atherogenic particle burden. <ul class="p-acts"><li>Same intervention as LDL-P: reduce refined carbs + fiber + omega-3s</li><li>Physician discussion: statin + ezetimibe is highly effective</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">3</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Investigate elevated blood lead (16.2 μg/dL)</div>
+          <div class="priority-name">Ferritin — low</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Lab max is 3.5 μg/dL — Zach is at 16.2, nearly 5x the threshold. Identify the exposure source (old paint, pipes, occupational, supplements). Discuss chelation evaluation with a physician who specializes in environmental medicine. This needs follow-up.</div>
+      <div class="priority-detail"><strong>32 ng/mL</strong> vs functional target 50 – 200. 32 ng/mL — below lab min (38). TRT increases RBC production and iron utilization. <ul class="p-acts"><li>Increase heme iron: beef, liver, oysters (most bioavailable)</li><li>Consider iron bisglycinate 25–50 mg/day with vitamin C</li><li>Retest in 8–12 weeks — target 75–100 ng/mL</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">4</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Monitor TRT polycythemia risk at every draw</div>
+          <div class="priority-name">LDL-Cholesterol — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Hemoglobin 17.4 g/dL (max 17.1) + Hematocrit 50.7% (clinical phlebotomy threshold at 52%). TRT commonly elevates RBC mass. Discuss thresholds with prescriber, stay hydrated, and check every panel — not just annually.</div>
+      <div class="priority-detail"><strong>144 mg/dL</strong> vs functional target ≤ 100. 144 mg/dL — combined with LDL-P 2253 and Pattern B: significant cardiovascular risk. <ul class="p-acts"><li>Reduce saturated fat; shift to monounsaturated (olive oil, avocado)</li><li>Add soluble fiber: psyllium 10 g/day, oats, legumes</li><li>Physician discussion: statin therapy</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">5</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Pattern B LDL reversal — shift particle size toward Pattern A</div>
+          <div class="priority-name">Hemoglobin — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">LDL Peak Size 216.6 Å vs. lab min of 222.9. Small dense LDL particles are more atherogenic than large buoyant LDL. The same dietary shift (cut refined carbs, add fiber and omega-3) that lowers LDL-P also drives pattern toward A.</div>
+      <div class="priority-detail"><strong>17.4 g/dL</strong> vs functional target 14.0 – 17.0. 17.4 g/dL — above lab max (17.1). Likely TRT-driven erythrocytosis. Monitor trend. <ul class="p-acts"><li>Stay hydrated — dehydration concentrates hemoglobin artificially</li><li>Discuss hematocrit threshold with TRT prescriber (phlebotomy if &gt;52%)</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">6</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Eosinophil workup — allergic or environmental load</div>
+          <div class="priority-name">Hematocrit — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Absolute eosinophils 583 cells/uL vs. lab max 500. Points to elevated allergic load, environmental exposure, or parasitic infection. Start with an IgE allergy panel and a dietary elimination trial (dairy, gluten). Review seasonal symptom patterns.</div>
+      <div class="priority-detail"><strong>50.7 %</strong> vs functional target 40.0 – 50.0. </div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">7</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">OmegaCheck 5.4% → target 8% with EPA+DHA</div>
+          <div class="priority-name">Triglycerides — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">0.1% below the lab minimum of 5.5%, but given elevated triglycerides and high LDL-P, targeting 8% is meaningful. Add EPA+DHA 2–3 g/day from fish oil or algal oil. Omega-3 index responds within 90 days.</div>
+      <div class="priority-detail"><strong>187 mg/dL</strong> vs functional target ≤ 100. 187 mg/dL — reflects carbohydrate/alcohol metabolism. Most modifiable lipid. <ul class="p-acts"><li>Reduce refined carbs, added sugars, alcohol</li><li>Add EPA+DHA 3–4 g/day — reduces triglycerides 20–40%</li><li>150+ min aerobic exercise/week</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">8</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Comprehensive TRT protocol review (E2, DHT, PSA, Hct)</div>
+          <div class="priority-name">Testosterone, Free — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">With hemoglobin and hematocrit trending high, a full TRT monitoring panel is warranted: estradiol (E2), DHT, PSA, and Hct at minimum. Ensures the protocol is dialed in and not creating downstream risk.</div>
+      <div class="priority-detail"><strong>134.7 pg/mL</strong> vs functional target 70 – 130. </div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">9</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">Ferritin repletion — titrate to 70–100 ng/mL</div>
+          <div class="priority-name">Non-HDL Cholesterol — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Ferritin 32 ng/mL — below the lab min of 38 and well below functional optimum of 70–100. Heme iron sources (beef, liver) + iron bisglycinate 25 mg with vitamin C on empty stomach. Avoid taking with coffee or calcium. Retest at 8 weeks.</div>
+      <div class="priority-detail"><strong>176 mg/dL</strong> vs functional target ≤ 130. 176 mg/dL — reflects total atherogenic burden (LDL + VLDL + IDL). <ul class="p-acts"><li>Improving triglycerides and LDL-C will lower non-HDL in parallel</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="zach" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">10</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-zach">Zach</span></div>
-          <div class="priority-name">LDL-P 2253 — most aggressive lipid intervention needed</div>
+          <div class="priority-name">LDL Pattern — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Highest LDL-P in the cohort at nearly 2x the lab max. If diet alone doesn't move it meaningfully in 90 days, a physician conversation about a low-dose statin (or rosuvastatin + ezetimibe) is appropriate given the age and trajectory.</div>
+      <div class="priority-detail"><strong>Pattern B</strong> vs functional target —. Pattern B — predominantly small, dense LDL. ~3× higher CV risk than Pattern A. <ul class="p-acts"><li>Reduce refined carbs, increase omega-3s, consistent aerobic exercise</li><li>Pattern B can shift to A over 3–6 months with intervention</li></ul></div>
     </div>
-
-    <!-- ── CHASE ── -->
-
     <div class="priority-card urgent" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">1</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Rheumatology evaluation — do not delay</div>
+          <div class="priority-name">ANA Screen, IFA — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">ANA positive 1:80 + WBC 2.8 K/uL + ANC 963 — the most urgent finding across both reports. Order reflex testing (anti-dsDNA, anti-Smith, anti-SSA/SSB, C3/C4) and get a rheumatology referral. This should not wait for the next routine visit.</div>
+      <div class="priority-detail"><strong>Positive 1:80</strong> vs functional target —. POSITIVE 1:80 — combined with leukopenia. ⚠️ Urgent rheumatology evaluation. <ul class="p-acts"><li>⚠️ Most urgent finding: rheumatology evaluation without delay</li><li>Reflex: anti-dsDNA, anti-Smith, anti-SSA/SSB, complement C3/C4</li><li>Avoid sun without protection — UV can trigger autoimmune flares</li></ul></div>
     </div>
-
-    <div class="priority-card" data-person="chase" style="display:none">
+    <div class="priority-card urgent" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">2</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">WBC / neutrophil monitoring — retest every 3 months</div>
+          <div class="priority-name">WBC — low</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">WBC 2.8 K/uL (min 3.8) + ANC 963 (min 1500) suggest immune suppression or bone marrow issue. In the context of a positive ANA this is especially important to track. Retest every 3 months until the pattern is understood and stable.</div>
+      <div class="priority-detail"><strong>2.8 K/uL</strong> vs functional target 4.0 – 7.0. 2.8 K/uL — below lab min (3.8). ⚠️ Physician evaluation required. <ul class="p-acts"><li>⚠️ Repeat CBC + full ANA panel (anti-dsDNA, anti-Smith, anti-SSA/SSB)</li><li>Rheumatology referral — ANA positive + leukopenia is a classic autoimmune pattern</li></ul></div>
     </div>
-
-    <div class="priority-card" data-person="chase" style="display:none">
+    <div class="priority-card urgent" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">3</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Retest AST/ALT after exercise rest and alcohol-free period</div>
+          <div class="priority-name">Absolute Neutrophils — low</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">AST 51 + ALT 51 — both above lab limits, but most likely exercise-induced rather than true liver pathology. Retest 48–72 hours after complete exercise rest and 2 full weeks alcohol-free. If persistent: hepatitis B/C panel and abdominal ultrasound.</div>
+      <div class="priority-detail"><strong>963 cells/uL</strong> vs functional target 2000 – 6000. 963 cells/uL — below clinical neutropenia threshold (1500). ⚠️ Physician evaluation. <ul class="p-acts"><li>⚠️ Rheumatology referral given ANA positive + neutropenia</li><li>Rule out viral causes (EBV, CMV, parvovirus B19) — can suppress WBC</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">4</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Reduce SHBG 54 — free testosterone impact</div>
+          <div class="priority-name">LDL Particle Number — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">SHBG 54 nmol/L (max 50) binds testosterone, reducing free T bioavailability. Adequate dietary carbohydrates raise insulin which suppresses hepatic SHBG production. Zinc sufficiency helps; boron 3–6 mg/day may also reduce SHBG. Check free T on next draw.</div>
+      <div class="priority-detail"><strong>1604 nmol/L</strong> vs functional target ≤ 1000. 1604 nmol/L — above lab max (1138). High atherogenic particle burden. <ul class="p-acts"><li>Reduce refined carbs, increase soluble fiber to 15–20 g/day</li><li>EPA+DHA 3–4 g/day reduces LDL particle count</li><li>Physician: statin + ezetimibe combination</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">5</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Retest creatinine off creatine supplementation</div>
+          <div class="priority-name">Apolipoprotein B — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Creatinine 1.27 mg/dL vs. lab max 1.26 — borderline and almost certainly supplement-related, not renal. Stop creatine for 1–2 weeks before next draw. Ensure 2–3 L hydration daily. If elevated on retest with declining eGFR: nephrology referral.</div>
+      <div class="priority-detail"><strong>99 mg/dL</strong> vs functional target ≤ 80. 99 mg/dL — above lab max (90). Cardiovascular risk marker. <ul class="p-acts"><li>Reduce refined carbs + soluble fiber + EPA/DHA 3–4 g/day</li><li>Physician discussion: statin therapy for ApoB reduction</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">6</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Anti-inflammatory diet while awaiting rheum eval</div>
+          <div class="priority-name">Ferritin — low</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">ANA positivity + low WBC justifies a dietary elimination trial (gluten, dairy, processed foods) while waiting for specialist workup. Omega-3s, colorful vegetables, and minimizing alcohol reduce systemic inflammation and won't interfere with testing.</div>
+      <div class="priority-detail"><strong>37 ng/mL</strong> vs functional target 50 – 200. 37 ng/mL — below lab min (38). Borderline low. <ul class="p-acts"><li>Increase heme iron: beef, liver, oysters</li><li>Consider iron bisglycinate 25–50 mg/day with vitamin C</li><li>Retest in 8–12 weeks — target 75–100 ng/mL</li></ul></div>
     </div>
-
     <div class="priority-card" data-person="chase" style="display:none">
       <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
         <span class="priority-rank">7</span>
         <div class="priority-meta">
           <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
-          <div class="priority-name">Vitamin D optimization — immune and hormonal foundation</div>
+          <div class="priority-name">LDL-Cholesterol — high</div>
         </div>
         <span class="card-tog">›</span>
       </div>
-      <div class="priority-detail">Vitamin D is foundational for immune regulation and testosterone production. If not already tested, add 25-OH Vitamin D to the next draw. Most functional practitioners target 50–80 ng/mL. Deficiency is common and correctable with D3 + K2 supplementation.</div>
+      <div class="priority-detail"><strong>109 mg/dL</strong> vs functional target ≤ 100. 109 mg/dL — above lab max (100). Combined with LDL-P 1604. <ul class="p-acts"><li>Shift fats toward monounsaturated sources (olive oil, avocado, nuts)</li><li>Add soluble fiber: psyllium 10 g/day, oats, legumes</li><li>Track ApoB and LDL-P for fuller cardiovascular picture</li></ul></div>
     </div>
-
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">8</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Vitamin D (25-OH) — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>36 ng/mL</strong> vs functional target 40 – 80. </div>
+    </div>
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">9</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">Homocysteine — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>8.7 umol/L</strong> vs functional target ≤ 8.0. </div>
+    </div>
+    <div class="priority-card" data-person="chase" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">10</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-chase">Chase</span></div>
+          <div class="priority-name">ALT — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>51 U/L</strong> vs functional target 10 – 25. 51 U/L — above lab max (46). More liver-specific than AST. Retest after rest. <ul class="p-acts"><li>Retest after exercise rest + alcohol abstinence</li><li>If persistent on retest: hepatitis panel + abdominal ultrasound</li></ul></div>
+    </div>
+    <div class="priority-card urgent" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">1</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">WBC — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>3.7 K/uL</strong> vs functional target 4.0 – 7.0. Flagged L (below 3.8). Mildly low white count. </div>
+    </div>
+    <div class="priority-card urgent" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">2</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Absolute Neutrophils — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>1961 cells/uL</strong> vs functional target 2000 – 6000. </div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">3</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">LDL Particle Number — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>1363 nmol/L</strong> vs functional target ≤ 1000. Flagged H. Moderate risk (1138-1409). Optimal &lt;1138. Male ref 1016-2185. <ul class="p-acts"><li>Reduce refined carbs, soluble fiber 15–20 g/day</li><li>EPA+DHA 3–4 g/day</li><li>Track ApoB (currently optimal at 77) as primary target</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">4</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Ferritin — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>20 ng/mL</strong> vs functional target 50 – 200. Flagged L (below 38). Low ferritin — iron stores depleted. Functional target 50-200. <ul class="p-acts"><li>Increase heme iron: beef, liver, oysters</li><li>Iron bisglycinate 25–50 mg/day with vitamin C</li><li>Retest in 8–12 weeks — target 75–100 ng/mL</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">5</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Iron, Total — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>66 mcg/dL</strong> vs functional target 70 – 160. Within lab range. Functional target 70-160 — slightly low. <ul class="p-acts"><li>Pairs with low ferritin — address iron intake together</li><li>Recheck full iron panel after 8–12 weeks of repletion</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">6</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Estradiol — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>41 pg/mL</strong> vs functional target 15 – 35. Flagged H (above 39). For males, Ultrasensitive LC/MS/MS recommended for accuracy. <ul class="p-acts"><li>For males on TRT, confirm with Ultrasensitive LC/MS/MS assay</li><li>Discuss aromatase management with prescriber if symptomatic</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">7</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Vitamin D (25-OH) — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>30 ng/mL</strong> vs functional target 40 – 80. At floor of lab range (&gt;=30). Functional target 40-80 — below optimal. Supplementation recommended. <ul class="p-acts"><li>Vitamin D3 4,000–5,000 IU/day with K2</li><li>Retest in 10–12 weeks — target 40–80 ng/mL</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">8</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Testosterone, Free — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>210.6 pg/mL</strong> vs functional target 70 – 130. Flagged H (above 155). Measured by equilibrium dialysis (med fusion). Elevated — consistent with TRT/optimization. </div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">9</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">Homocysteine — high</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>9.1 umol/L</strong> vs functional target ≤ 8.0. Within lab reference &lt;=13.5. Functional target &lt;=8.0 — mildly elevated. <ul class="p-acts"><li>B-complex with methylfolate + B12 + B6</li><li>Recheck in 8–12 weeks — functional target ≤8.0</li></ul></div>
+    </div>
+    <div class="priority-card" data-person="thomas" style="display:none">
+      <div class="p-header" onclick="toggleCard(this.closest('.priority-card'))">
+        <span class="priority-rank">10</span>
+        <div class="priority-meta">
+          <div class="priority-who"><span class="who-tag who-thomas">Thomas</span></div>
+          <div class="priority-name">HDL Cholesterol — low</div>
+        </div>
+        <span class="card-tog">›</span>
+      </div>
+      <div class="priority-detail"><strong>40 mg/dL</strong> vs functional target ≥ 50. Reference &gt;=40. At the floor; functional target &gt;=50. <ul class="p-acts"><li>Aerobic exercise + monounsaturated fats</li><li>At the 40 floor — aim ≥50</li></ul></div>
+    </div>
   </div>
 </div>
 
